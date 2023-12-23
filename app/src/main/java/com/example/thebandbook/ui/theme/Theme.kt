@@ -20,6 +20,7 @@ private val DarkColorScheme = darkColorScheme(
     secondary = Secondary,
     tertiary = Tertiary,
     background = Background,
+    secondaryContainer = SecondaryContainer,
 //    surface = Color(0xFFFFFBFE),
     onPrimary = OnPrimary,
 //    onSecondary = Color.White,
