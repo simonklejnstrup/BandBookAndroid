@@ -2,9 +2,10 @@ package com.example.thebandbook.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFFFEB3B)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val Primary = Color(0xFFE46F3A)
+val Secondary = Color(0xFFE3A23A)
+val Tertiary = Color(0xFF8BBC92)
+val OnPrimary = Color(0xFFE6E0E9)
 val Background = Color(0xFF141218)
 
 val Purple40 = Color(0xFF6650a4)
