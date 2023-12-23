@@ -16,12 +16,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
+    primary = Primary,
+    secondary = Secondary,
+    tertiary = Tertiary,
     background = Background,
 //    surface = Color(0xFFFFFBFE),
-//    onPrimary = Color.White,
+    onPrimary = OnPrimary,
 //    onSecondary = Color.White,
 //    onTertiary = Color.White,
 //    onBackground = Color(0xFF1C1B1F),
@@ -54,10 +54,11 @@ fun TheBandBookTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+//        Bypass dynamic color
+//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+//            val context = LocalContext.current
+//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+//        }
 
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
