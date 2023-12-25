@@ -57,9 +57,10 @@ fun AppContent() {
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) {
+
         NavHost(navController, startDestination = AppRoutes.DASHBOARD) {
             composable(AppRoutes.CALENDAR) { CalendarScreen() }
-            composable(AppRoutes.FORUM) { ForumScreen(navController) }
+            composable(AppRoutes.FORUM) { ForumScreen() }
             composable(AppRoutes.DASHBOARD) { DashboardScreen() }
             composable(AppRoutes.FORUM_CREATE_EVENT) { ForumCreateEventScreen(navController) }
         }
