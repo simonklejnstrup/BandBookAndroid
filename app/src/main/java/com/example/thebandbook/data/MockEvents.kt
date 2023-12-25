@@ -1,6 +1,6 @@
 package com.example.thebandbook.data
 
-import com.example.thebandbook.presentation.screens.Event
+import com.example.thebandbook.domain.Model.Event
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -20,7 +20,8 @@ val mockEvents = listOf(
         extraCosts = 150,
         nameOfContactPerson = "Jane Smith",
         telephoneNumberOfContactPerson = "987-654-3210",
-        note = "Indoor event, air-conditioned."
+        note = "Indoor event, air-conditioned.",
+        type = "meeting"
     ),
     Event(
         id = 2,
@@ -37,7 +38,8 @@ val mockEvents = listOf(
         extraCosts = 150,
         nameOfContactPerson = "Jane Smith",
         telephoneNumberOfContactPerson = "987-654-3210",
-        note = "Indoor event, air-conditioned."
+        note = "Indoor event, air-conditioned.",
+        type = "gig"
     ),
     Event(
         id = 3,
@@ -54,7 +56,8 @@ val mockEvents = listOf(
         extraCosts = 150,
         nameOfContactPerson = "Jane Smith",
         telephoneNumberOfContactPerson = "987-654-3210",
-        note = "Indoor event, air-conditioned."
+        note = "Indoor event, air-conditioned.",
+        type = "gig"
     ),
     Event(
         id = 4,
@@ -71,6 +74,7 @@ val mockEvents = listOf(
         extraCosts = 150,
         nameOfContactPerson = "Jane Smith",
         telephoneNumberOfContactPerson = "987-654-3210",
-        note = "Indoor event, air-conditioned."
+        note = "Indoor event, air-conditioned.",
+        type = "rehearsal"
     )
 )
