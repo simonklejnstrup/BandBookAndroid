@@ -1,7 +1,5 @@
 package com.example.thebandbook.presentation.screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,12 +38,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.thebandbook.data.mockEvents
+import com.example.thebandbook.domain.Model.EventType
 import com.example.thebandbook.ui.theme.TheBandBookTheme
-import java.time.LocalDate
-import java.time.LocalTime
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreen(
 //    navController: NavController,
@@ -87,8 +83,10 @@ fun CalendarScreen(
                                 // Display the year as a divider
                                 YearDivider(year)
                             }
-                            items(events.size) { event ->
-                                EventItem(event)
+                            items(events.size) { index ->
+                                val event = events[index]
+                                val eventType = EventType.fromString(event.type)
+                                EventItem(eventType)
                             }
                         }
                         item {
@@ -138,21 +136,24 @@ fun CalendarScreen(
 
 @Composable
 fun YearDivider(year: Int) {
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Divider()
+        Divider(modifier = Modifier.weight(1f))
         Text(
             text = year.toString(),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(horizontal = 8.dp)
         )
-        Divider()
+        Divider(modifier = Modifier.weight(1f))
     }
 }
 
 @Composable
-fun EventItem(index: Int) {
+fun EventItem(eventType: EventType) {
     val shape = RoundedCornerShape(12.dp)
     TheBandBookTheme {
         Row(
@@ -167,7 +168,7 @@ fun EventItem(index: Int) {
         ) {
 
             AddressBox(
-                eventType = EventType.Meeting)
+                eventType = eventType)
 
             Column(
                 modifier = Modifier
@@ -271,18 +272,6 @@ fun AddressBox(eventType: EventType) {
     }
 }
 
-
-
-enum class EventType(val displayName: String) {
-    Gig("Gig"),
-    Meeting("Meeting"),
-    Rehearsal("Rehearsal");
-
-    fun getEventDescription(): String {
-        return "Event Type: $displayName"
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun CalendarScreenPreview() {
@@ -312,21 +301,4 @@ fun AdressBoxMeetingPreview() {
     }
 }
 
-data class Event(
-    val id: Int,
-    val title: String,
-    val address: String,
-    val date: LocalDate,
-    val timeOfGetIn: LocalTime,
-    val timeOfSoundcheck: LocalTime,
-    val timeOfConcert: LocalTime,
-    val timeOfDone: LocalTime,
-    val salaryPerPerson: Int,
-    val costOfRentalGear: Int,
-    val costOfTransport: Int,
-    val extraCosts: Int,
-    val nameOfContactPerson: String,
-    val telephoneNumberOfContactPerson: String,
-    val note: String
-)
 
