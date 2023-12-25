@@ -8,6 +8,7 @@ val Tertiary = Color(0xFF8BBC92)
 val OnPrimary = Color(0xFFE6E0E9)
 val Background = Color(0xFF141218)
 val SecondaryContainer = Color(0xFF2B2930) //cards
+val TertiaryContainer = Color(0xFF36343B) //button on card
 
 
 val Purple40 = Color(0xFF6650a4)
