@@ -56,7 +56,9 @@ fun TheBandBookTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-//        Bypass dynamic color
+        /**
+         * Bypass dynamic color implementation
+         */
 //        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
 //            val context = LocalContext.current
 //            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
