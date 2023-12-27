@@ -14,8 +14,9 @@ import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.presentation.screens.DashboardScreen
 import com.example.thebandbook.presentation.screens.ForumCreateEventScreen
 import com.example.thebandbook.presentation.screens.ForumScreen
-import com.example.thebandbook.presentation.screens.CalendarScreen
+import com.example.thebandbook.presentation.screens.calendar.CalendarScreen
 import com.example.thebandbook.presentation.common.BottomNavigationBar
+import com.example.thebandbook.presentation.screens.calendar.CreateEventScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,8 @@ fun AppContent() {
     ) {
 
         NavHost(navController, startDestination = AppRoutes.DASHBOARD) {
-            composable(AppRoutes.CALENDAR) { CalendarScreen() }
+            composable(AppRoutes.CALENDAR) { CalendarScreen(navController) }
+            composable(AppRoutes.CREATE_EVENT_SCREEN) { CreateEventScreen(navController) }
             composable(AppRoutes.FORUM) { ForumScreen() }
             composable(AppRoutes.DASHBOARD) { DashboardScreen() }
             composable(AppRoutes.FORUM_CREATE_EVENT) { ForumCreateEventScreen(navController) }
