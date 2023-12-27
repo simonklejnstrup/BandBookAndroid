@@ -1,4 +1,4 @@
-package com.example.thebandbook.presentation.screens
+package com.example.thebandbook.presentation.screens.calendar
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -37,14 +37,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.thebandbook.data.mockEvents
 import com.example.thebandbook.domain.Model.EventType
+import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 
 
 @Composable
 fun CalendarScreen(
-//    navController: NavController,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
 
@@ -61,13 +63,6 @@ fun CalendarScreen(
                 verticalArrangement = Arrangement.Center, // This centers the children vertically
                 horizontalAlignment = Alignment.CenterHorizontally // Center children horizontally as well
             ) {
-
-                Text(
-                    text = "Say something",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.padding(30.dp)
-                )
 
                 Box {
 
@@ -114,10 +109,8 @@ fun CalendarScreen(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(bottom = 96.dp, end = 16.dp),
-                        onClick = { /* Handle FAB click here */ },
-                        containerColor =
-                        MaterialTheme.colorScheme.secondary,
-                        //                        Color.Yellow,
+                        onClick = { navController.navigate(AppRoutes.CREATE_EVENT_SCREEN) },
+                        containerColor = MaterialTheme.colorScheme.secondary,
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     ) {
                         Icon(
@@ -272,13 +265,16 @@ fun AddressBox(eventType: EventType) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CalendarScreenPreview() {
-    TheBandBookTheme {
-        CalendarScreen()
-    }
-}
+
+
+//@Preview(showBackground = true)
+//@Composable
+//fun CalendarScreenPreview() {
+//    TheBandBookTheme {
+//        CalendarScreen()
+//    }
+//}
+
 @Preview(showBackground = true)
 @Composable
 fun AdressBoxGigPreview() {
