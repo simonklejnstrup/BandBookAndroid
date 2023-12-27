@@ -19,7 +19,9 @@ data class Event(
     val nameOfContactPerson: String,
     val telephoneNumberOfContactPerson: String,
     val note: String,
-    val type: String
+    val type: String,
+    val lengthOfEachSet: Int = 45,
+    val numberOfSets: Int = 2
 )
 
 enum class EventType(val displayName: String) {
