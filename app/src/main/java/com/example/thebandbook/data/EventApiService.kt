@@ -6,6 +6,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface EventApiService {
-    @POST("events/create")
-    suspend fun createEvent(@Body eventData: CreateEventViewModel.EventData): Response<Unit> // Replace Unit with your response type
+    @POST("http://localhost:8080/event")
+    suspend fun createEvent(@Body eventData: CreateEventViewModel.EventData): Response<EventResponse>
 }

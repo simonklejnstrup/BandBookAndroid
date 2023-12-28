@@ -4,9 +4,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.thebandbook.data.apiService
 import com.example.thebandbook.domain.Model.EventType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -101,10 +104,20 @@ open class CreateEventViewModel : ViewModel() {
 
     // Function to submit the event data
     fun submitEvent() {
-        // Implement your logic to submit the event
-        // This could involve validating the data and then sending it to a repository or API
-        println("This is the eventdata: ${_eventData.value}")
+        viewModelScope.launch {
+            try {
+                val response = apiService.createEvent(eventData.value)
+                if (response.isSuccessful) {
+                    // Handle successful response
+                } else {
+                    // Handle error response
+                }
+            } catch (e: Exception) {
+                // Handle network exception
+            }
+        }
     }
+
 
     private val _selectedEventType = mutableStateOf(EventType.Gig)
     val selectedEventType: State<EventType> = _selectedEventType
