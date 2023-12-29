@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 @Composable
-fun ForumCreateEventScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun ForumCreateThreadScreen(modifier: Modifier = Modifier) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
