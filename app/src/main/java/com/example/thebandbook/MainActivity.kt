@@ -12,10 +12,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.presentation.screens.DashboardScreen
-import com.example.thebandbook.presentation.screens.ForumCreateEventScreen
+import com.example.thebandbook.presentation.screens.ForumCreateThreadScreen
 import com.example.thebandbook.presentation.screens.ForumScreen
 import com.example.thebandbook.presentation.screens.calendar.CalendarScreen
-import com.example.thebandbook.presentation.common.BottomNavigationBar
+import com.example.thebandbook.navigation.BottomNavigationBar
 import com.example.thebandbook.presentation.screens.calendar.CreateEventScreen
 
 class MainActivity : ComponentActivity() {
@@ -62,9 +62,9 @@ fun AppContent() {
         NavHost(navController, startDestination = AppRoutes.DASHBOARD) {
             composable(AppRoutes.CALENDAR) { CalendarScreen(navController) }
             composable(AppRoutes.CREATE_EVENT_SCREEN) { CreateEventScreen(navController) }
-            composable(AppRoutes.FORUM) { ForumScreen() }
+            composable(AppRoutes.FORUM) { ForumScreen(navController) }
+            composable(AppRoutes.FORUM_CREATE_THREAD) { ForumCreateThreadScreen() }
             composable(AppRoutes.DASHBOARD) { DashboardScreen() }
-            composable(AppRoutes.FORUM_CREATE_EVENT) { ForumCreateEventScreen(navController) }
         }
     }
 }
