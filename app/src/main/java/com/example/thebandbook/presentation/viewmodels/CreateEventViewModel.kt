@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thebandbook.data.apiService
-import com.example.thebandbook.domain.Model.EventType
+import com.example.thebandbook.domain.model.EventType
 import com.example.thebandbook.navigation.NavigationEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +24,9 @@ open class CreateEventViewModel : ViewModel() {
     private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
     val navigationEvent = _navigationEvent.asSharedFlow()
 
+    suspend fun onBackPressed() {
+        _navigationEvent.emit(NavigationEvent.NavigateBack)
+    }
     fun setTitle(title: String) {
         _eventData.value = eventData.value.copy(title = title)
     }
@@ -96,11 +99,6 @@ open class CreateEventViewModel : ViewModel() {
         _eventData.value = eventData.value.copy(type = type)
     }
 
-    fun getDate(): LocalDate? {
-        println("getDate(): ${_eventData.value.date}")
-        return _eventData.value.date
-    }
-
     fun onLengthOfSetPressed(isChecked: Boolean) {
         _eventData.value = eventData.value.copy(lengthOfEachSet = if (isChecked) 60 else 45)
     }
@@ -129,7 +127,7 @@ open class CreateEventViewModel : ViewModel() {
 
     fun onEventTypeSelected(eventType: EventType) {
         _selectedEventType.value = eventType
-        _eventData.value = eventData.value.copy(type = eventType.displayName)
+        setEventType(eventType.displayName)
     }
 
     // Internal data class to hold the event data
