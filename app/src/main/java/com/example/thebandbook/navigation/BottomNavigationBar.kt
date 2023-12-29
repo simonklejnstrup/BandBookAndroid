@@ -32,7 +32,9 @@ fun BottomNavigationBar(navController: NavController) {
         ) {
             items.forEach { screen ->
 
-                val isSelected = currentRoute == screen.route
+                val isSelected = featureGroups.any {
+                    it.value.contains(currentRoute) && it.value.contains(screen.route)
+                }
 
                 NavigationBarItem(
                     icon = {
@@ -67,3 +69,9 @@ fun BottomNavigationBar(navController: NavController) {
         }
     }
 }
+
+val featureGroups = mapOf(
+    "Calendar" to listOf(AppRoutes.CALENDAR, AppRoutes.CREATE_EVENT_SCREEN),
+    "Forum" to listOf(AppRoutes.FORUM, AppRoutes.FORUM_CREATE_THREAD),
+    "Dashboard" to listOf(AppRoutes.DASHBOARD)
+)
