@@ -7,19 +7,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thebandbook.data.apiService
 import com.example.thebandbook.domain.Model.EventType
+import com.example.thebandbook.navigation.NavigationEvent
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
 open class CreateEventViewModel : ViewModel() {
-    // MutableStateFlow to hold the state
     private val _eventData = MutableStateFlow(EventData())
     open val eventData = _eventData.asStateFlow()
     val switchState: MutableState<Boolean> = mutableStateOf(false)
 
-    // Update functions for each field
+    private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
+    val navigationEvent = _navigationEvent.asSharedFlow()
+
     fun setTitle(title: String) {
         _eventData.value = eventData.value.copy(title = title)
     }
@@ -108,12 +112,13 @@ open class CreateEventViewModel : ViewModel() {
             try {
                 val response = apiService.createEvent(eventData.value)
                 if (response.isSuccessful) {
-                    // Handle successful response
+                    println("POST request Succesful")
                 } else {
-                    // Handle error response
+                    println("POST request failed")
                 }
             } catch (e: Exception) {
-                // Handle network exception
+                _navigationEvent.emit(NavigationEvent.NavigateBack)
+                println("POST request network exception ${e.message}")
             }
         }
     }
