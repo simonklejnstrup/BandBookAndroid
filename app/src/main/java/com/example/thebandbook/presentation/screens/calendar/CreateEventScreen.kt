@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.thebandbook.R
 import com.example.thebandbook.domain.Model.EventType
+import com.example.thebandbook.navigation.NavigationEvent
 import com.example.thebandbook.presentation.screens.GrayDivider
 import com.example.thebandbook.presentation.viewmodels.CreateEventViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
@@ -52,6 +53,16 @@ val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
 fun CreateEventScreen(navController: NavController) {
     val viewModel: CreateEventViewModel = viewModel()
     val eventData by viewModel.eventData.collectAsState()
+
+    // Observe navigation events
+    LaunchedEffect(key1 = Unit) {
+        viewModel.navigationEvent.collect { event ->
+            when (event) {
+                is NavigationEvent.NavigateBack -> navController.popBackStack()
+                is NavigationEvent.NavigateToDetails -> navController.navigate("details/${event.id}")
+            }
+        }
+    }
 
     Column {
 
@@ -326,7 +337,7 @@ fun SalaryInputSection(
     Column {
         Icon(
             painter = painterResource(id = R.drawable.ic_salary),
-            contentDescription = "Time section",
+            contentDescription = "Money icon",
             modifier = Modifier
                 .size(40.dp)
                 .fillMaxWidth()
