@@ -39,11 +39,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 
 @Composable
 fun ForumScreen(
-//    navController: NavController,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     TheBandBookTheme {
@@ -102,7 +105,7 @@ fun ForumScreen(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(bottom = 96.dp, end = 16.dp),
-                        onClick = { /* Handle FAB click here */ },
+                        onClick = { navController.navigate(AppRoutes.FORUM_CREATE_THREAD) },
                         containerColor =
                         MaterialTheme.colorScheme.secondary,
                         //                        Color.Yellow,
@@ -250,6 +253,12 @@ fun ThreeDotMenu() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun ForumScreenPreview() {
+    ForumScreen(rememberNavController())
+}
+
 @Preview
 @Composable
 fun PreviewThreeDotMenu() {
@@ -260,12 +269,6 @@ fun PreviewThreeDotMenu() {
 @Composable
 fun ThreadItemPreview() {
     ThreadItem(index = 1)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ForumScreenPreview() {
-    ForumScreen()
 }
 
 
