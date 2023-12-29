@@ -1,8 +1,5 @@
 package com.example.thebandbook.presentation.screens.calendar
 
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,29 +23,23 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,17 +54,22 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.thebandbook.R
 import com.example.thebandbook.data.mockEvents
-import com.example.thebandbook.domain.Model.Event
-import com.example.thebandbook.domain.Model.EventType
+import com.example.thebandbook.domain.model.Event
+import com.example.thebandbook.domain.model.EventType
 import com.example.thebandbook.navigation.AppRoutes
+import com.example.thebandbook.presentation.screens.common.BottomSheetState
+import com.example.thebandbook.presentation.screens.common.EventDetailBottomSheet
+import com.example.thebandbook.presentation.viewmodels.SharedEventDetailsBottomSheetViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 import com.example.thebandbook.util.HSpacer
 import com.example.thebandbook.util.VSpacer
 import com.example.thebandbook.util.openMap
+import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -85,16 +80,20 @@ fun CalendarScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    val sharedViewModel: SharedEventDetailsBottomSheetViewModel = viewModel()
+    val bottomSheetState by sharedViewModel.bottomSheetState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val skipPartiallyExpanded by remember { mutableStateOf(true) }
-    val edgeToEdgeEnabled by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-    val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = skipPartiallyExpanded
-    )
-    var selectedEvent by remember { mutableStateOf<Event?>(null) }
+    LaunchedEffect(bottomSheetState) {
+        when (bottomSheetState) {
+            BottomSheetState.Open -> coroutineScope.launch { modalBottomSheetState.show() }
+            BottomSheetState.Closed -> coroutineScope.launch { modalBottomSheetState.hide() }
+        }
+    }
 
+    // Shows if sharedViewModel.openBottomSheetWithEvent(event) is called
+    EventDetailBottomSheet(viewModel = sharedViewModel)
 
     TheBandBookTheme {
 
@@ -117,7 +116,7 @@ fun CalendarScreen(
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         //                contentPadding = PaddingValues(vertical = 17.dp),
-                        verticalArrangement = Arrangement.spacedBy(17.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         eventsGroupedByYear.forEach { (year, events) ->
                             item {
@@ -129,8 +128,7 @@ fun CalendarScreen(
                                 EventItem(
                                     event = event,
                                     onClick = {
-                                        selectedEvent = event
-                                        openBottomSheet = !openBottomSheet
+                                        sharedViewModel.openBottomSheetWithEvent(event)
                                     }
                                 )
                             }
@@ -170,160 +168,13 @@ fun CalendarScreen(
                             modifier = Modifier.size(40.dp)
                         )
                     }
-
-                    // Sheet content
-                    if (openBottomSheet) {
-                        val windowInsets = if (edgeToEdgeEnabled)
-                            WindowInsets(0) else BottomSheetDefaults.windowInsets
-
-                        ModalBottomSheet(
-                            onDismissRequest = { openBottomSheet = false },
-                            sheetState = bottomSheetState,
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            windowInsets = windowInsets
-                        ) {
-
-                            EventDetailSheetContent(
-                                event = selectedEvent
-                            )
-                        }
-                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun EventDetailSheetContent(
-    event: Event?
-) {
-    val context = LocalContext.current
-    event?.let {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        AddressBox(event = event)
-                        VSpacer(height = 4.dp)
-                        Text(
-                            text = event.date.format(DateTimeFormatter.ofPattern("yyyy")),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
-                        )
-                    }
-                    HSpacer(width = 10.dp)
 
-                    Column(
-                        modifier = Modifier
-                            .weight(3f),
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            text = event.title,
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight(700),
-                            style = LocalTextStyle.current.merge(
-                                TextStyle(
-                                    platformStyle = PlatformTextStyle(
-                                        includeFontPadding = false
-                                    ),
-                                    lineHeightStyle = LineHeightStyle(
-                                        alignment = LineHeightStyle.Alignment.Top,
-                                        trim = LineHeightStyle.Trim.Both
-                                    )
-                                )
-                            ),
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                        Row {
-                            Text(
-                                modifier = Modifier.weight(5f),
-                                text = event.address,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
-                                lineHeight = 13.sp
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-
-                        }
-                    }
-                    MapButton(
-                        onClick = {
-                            openMap(event.address, context)
-                        }
-                    )
-                }
-            }
-            VSpacer(height = 10.dp)
-            // Contact Information
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                val u = Uri.parse("tel:" + event.telephoneNumberOfContactPerson)
-                val i = Intent(Intent.ACTION_DIAL, u)
-                IconButton(
-                    onClick = {
-                        try {
-                            context.startActivity(i)
-                        } catch (s: SecurityException) {
-
-                            Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG)
-                                .show()
-                        }
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Call,
-                        contentDescription = "Call person of contact"
-                    )
-                }
-                HSpacer(8.dp)
-                Text(
-                    text = event.nameOfContactPerson,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-
-            VSpacer(height = 10.dp)
-
-            // Schedule - Icons and times
-            // Repeat this Row for each schedule item: get in, soundcheck, concert, end
-
-            ScheduleSection(event = event)
-
-            VSpacer(height = 25.dp)
-
-            Text(
-                text = "Concert length: ${event.numberOfSets} x ${event.lengthOfEachSet}",
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.bodyLarge
-            )
-
-            VSpacer(height = 25.dp)
-
-            FinanceSection(event = event)
-
-            VSpacer(height = 25.dp)
-
-            NoteSection(event = event)
-
-            VSpacer(height = 80.dp)
-
-        }
-    }
-}
 
 @Composable
 fun NoteSection(event: Event) {
@@ -497,7 +348,7 @@ fun YearDivider(year: Int) {
 @Composable
 fun EventItem(
     event: Event,
-    onClick: () -> Unit
+    onClick: (Event) -> Unit
 ) {
     val shape = RoundedCornerShape(12.dp)
     val context = LocalContext.current
@@ -511,7 +362,7 @@ fun EventItem(
                 .background(
                     color = MaterialTheme.colorScheme.secondaryContainer,
                 )
-                .clickable { onClick() }
+                .clickable { onClick(event) }
         ) {
             Row(
                 modifier = Modifier
@@ -644,18 +495,6 @@ fun AddressBox(
                     )
             }
         }
-    }
-}
-
-
-@Preview(showBackground = false)
-@Composable
-fun EventDetailSheetContentPreview() {
-    TheBandBookTheme {
-        EventDetailSheetContent(
-//            onDismiss = {},
-            mockEvents[0]
-        )
     }
 }
 
