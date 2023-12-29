@@ -1,6 +1,6 @@
 package com.example.thebandbook.data
 
-import com.example.thebandbook.domain.Model.Event
+import com.example.thebandbook.domain.model.Event
 import java.time.LocalDate
 import java.time.LocalTime
 
