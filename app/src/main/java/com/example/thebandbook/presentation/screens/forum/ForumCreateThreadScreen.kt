@@ -1,4 +1,4 @@
-package com.example.thebandbook.presentation.screens
+package com.example.thebandbook.presentation.screens.forum
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme

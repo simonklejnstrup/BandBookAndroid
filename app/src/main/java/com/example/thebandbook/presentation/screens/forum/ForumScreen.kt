@@ -1,4 +1,4 @@
-package com.example.thebandbook.presentation.screens
+package com.example.thebandbook.presentation.screens.forum
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +43,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.ui.theme.TheBandBookTheme
+import com.example.thebandbook.util.RedVerticalDivider
 
 @Composable
 fun ForumScreen(
@@ -153,14 +154,14 @@ fun ThreadItem(index: Int) {
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight(700)
                 )
-                RedDivider()
+                RedVerticalDivider()
                 Text(
                     text = "22 jul",
                     color = Color.Gray,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight(700)
                 )
-                RedDivider()
+                RedVerticalDivider()
                 Text(
                     text = "Mathias Harbeck",
                     color = MaterialTheme.colorScheme.onPrimary,
@@ -200,16 +201,7 @@ fun ThreadItem(index: Int) {
     }
 }
 
-@Composable
-fun RedDivider() {
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 6.dp)
-            .width(1.dp)
-            .height(12.dp)
-            .background(color = MaterialTheme.colorScheme.primary)
-    )
-}
+
 
 @Composable
 fun GrayDivider() {
