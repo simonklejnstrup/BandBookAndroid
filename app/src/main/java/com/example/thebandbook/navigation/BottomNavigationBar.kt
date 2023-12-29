@@ -1,4 +1,4 @@
-package com.example.thebandbook.presentation.common
+package com.example.thebandbook.navigation
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.thebandbook.navigation.Screen
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 import java.util.Locale
 
