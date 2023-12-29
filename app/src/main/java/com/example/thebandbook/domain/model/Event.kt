@@ -1,4 +1,4 @@
-package com.example.thebandbook.domain.Model
+package com.example.thebandbook.domain.model
 
 import java.time.LocalDate
 import java.time.LocalTime
