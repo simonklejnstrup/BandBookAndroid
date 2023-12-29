@@ -34,9 +34,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.thebandbook.R
-import com.example.thebandbook.domain.Model.EventType
+import com.example.thebandbook.domain.model.EventType
 import com.example.thebandbook.navigation.NavigationEvent
-import com.example.thebandbook.presentation.screens.GrayDivider
+import com.example.thebandbook.presentation.screens.forum.GrayDivider
 import com.example.thebandbook.presentation.viewmodels.CreateEventViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 import com.example.thebandbook.util.CustomSwitch
@@ -59,14 +59,13 @@ fun CreateEventScreen(navController: NavController) {
         viewModel.navigationEvent.collect { event ->
             when (event) {
                 is NavigationEvent.NavigateBack -> navController.popBackStack()
-                is NavigationEvent.NavigateToDetails -> navController.navigate("details/${event.id}")
             }
         }
     }
 
     Column {
 
-        NavigationAndSaveRow(viewModel, navController)
+        NavigationAndSaveRow(viewModel)
 
         TitleTextField(viewModel, eventData)
 
@@ -251,15 +250,23 @@ fun ContactPersonInputRow(
 @Composable
 fun NavigationAndSaveRow(
     viewModel: CreateEventViewModel,
-    navController: NavController
 ) {
+    var triggerBackPress by remember { mutableStateOf(false) }
+
+    // Handle back press
+    LaunchedEffect(triggerBackPress) {
+        if (triggerBackPress) {
+            viewModel.onBackPressed()
+            triggerBackPress = false // Resets the trigger
+        }
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { navController.popBackStack() }) {
+        IconButton(onClick = { triggerBackPress = true }) {
             Icon(
                 imageVector = Icons.Filled.KeyboardArrowLeft,
                 contentDescription = "Back"
