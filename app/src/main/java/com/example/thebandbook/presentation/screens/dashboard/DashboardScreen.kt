@@ -32,7 +32,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -53,13 +52,11 @@ import com.example.thebandbook.presentation.screens.calendar.EventItem
 import com.example.thebandbook.presentation.screens.common.BottomSheetState
 import com.example.thebandbook.presentation.screens.common.EventDetailBottomSheet
 import com.example.thebandbook.presentation.screens.common.ThreadBottomSheet
+import com.example.thebandbook.presentation.screens.common.ThreadInfoRow
 import com.example.thebandbook.presentation.viewmodels.SharedEventDetailsBottomSheetViewModel
 import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
-import com.example.thebandbook.util.RedVerticalDivider
 import com.example.thebandbook.util.VSpacer
-import com.example.thebandbook.util.formatInstantToDateAndMonth
-import com.example.thebandbook.util.formatInstantToHoursAndMinutes
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,12 +66,15 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
 
     val sharedEventDetailsViewModel: SharedEventDetailsBottomSheetViewModel = viewModel()
     val eventDetailBottomSheetState by sharedEventDetailsViewModel.bottomSheetState.collectAsState()
-    val eventDetailModalBottomSheetState =
-        rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val eventDetailModalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val sharedThreadBottomSheetViewModel: SharedThreadBottomSheetViewModel = viewModel()
     val threadBottomSheetState by sharedThreadBottomSheetViewModel.bottomSheetState.collectAsState()
     val threadModalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+//    val dashboardViewModel: DashboardViewModel = viewModel()
+//    val dashboardBottomSheetState by dashboardViewModel.bottomSheetState.collectAsState()
+//    val dashboardModalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(eventDetailBottomSheetState) {
         when (eventDetailBottomSheetState) {
@@ -90,9 +90,19 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
         }
     }
 
+//    LaunchedEffect(dashboardBottomSheetState) {
+//        when (dashboardBottomSheetState) {
+//            BottomSheetState.Open -> coroutineScope.launch {
+//                dashboardModalBottomSheetState.show() }
+//            BottomSheetState.Closed -> coroutineScope.launch { dashboardModalBottomSheetState.hide() }
+//        }
+//    }
+
     ThreadBottomSheet(viewModel = sharedThreadBottomSheetViewModel)
 
     EventDetailBottomSheet(viewModel = sharedEventDetailsViewModel)
+    
+//    SettingsBottomSheet(viewModel = dashboardViewModel)
 
     TheBandBookTheme {
 
@@ -113,7 +123,9 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
 
             DashboardLoggedInContent(
                 user = currentUser,
-                onSettingsClick = {},
+                onSettingsClick = {
+//                    dashboardViewModel.openDashboardBottomSheet()
+                                  },
                 onThreadSelected = { forumThread ->
                     sharedThreadBottomSheetViewModel.openBottomSheetWithThread(forumThread)
                 },
@@ -238,7 +250,10 @@ fun ThreadListItem(
 ) {
     Column(
     ) {
-        ThreadInfoRow(thread = thread)
+        ThreadInfoRow(
+            modifier = Modifier.padding(start = 15.dp),
+            thread = thread
+        )
         ThreadBox(
             thread = thread,
             onThreadSelected = onThreadSelected,
@@ -333,35 +348,7 @@ fun DashboardHeader(
     )
 }
 
-@Composable
-fun ThreadInfoRow(thread: ForumThread) {
-    val onPrimary50 = MaterialTheme.colorScheme.onPrimary.copy(alpha = .5f)
-    MaterialTheme {
-        Row(
-            modifier = Modifier
-                .padding(start = 15.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = formatInstantToHoursAndMinutes(thread.createdAt),
-                style = MaterialTheme.typography.bodyMedium,
-                color = onPrimary50
-            )
-            RedVerticalDivider()
-            Text(
-                text = formatInstantToDateAndMonth(thread.createdAt),
-                style = MaterialTheme.typography.bodyMedium,
-                color = onPrimary50
-            )
-            RedVerticalDivider()
-            Text(
-                text = thread.createdBy,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-    }
-}
+
 
 @Composable
 fun DashboardNotLoggedInContent() {
