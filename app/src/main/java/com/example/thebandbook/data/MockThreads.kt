@@ -52,5 +52,51 @@ val mockThreads = listOf(
 
         )
     ),
+ForumThread(
+        id = 3,
+        title = "ex title",
+        createdBy = "Henriette Lund",
+        createdAt = Instant.now(),
+        comments = mutableListOf(
+            Comment(
+                id = 5,
+                content = "Lang kommentar",
+                createdBy = "Henriette Lund",
+                createdAt = Instant.now(),
+                threadId = 1
+            ),
+            Comment(
+                id = 6,
+                content = "Lang kommentar",
+                createdBy = "Henriette Lund",
+                createdAt = Instant.now(),
+                threadId = 1
+            ),
+
+        )
+    ),
+ForumThread(
+        id = 4,
+        title = "ex title",
+        createdBy = "Henriette Lund",
+        createdAt = Instant.now(),
+        comments = mutableListOf(
+            Comment(
+                id = 7,
+                content = "Lang kommentar",
+                createdBy = "Henriette Lund",
+                createdAt = Instant.now(),
+                threadId = 1
+            ),
+            Comment(
+                id = 8,
+                content = "Lang kommentar",
+                createdBy = "Henriette Lund",
+                createdAt = Instant.now(),
+                threadId = 1
+            ),
+
+        )
+    ),
 
 )
