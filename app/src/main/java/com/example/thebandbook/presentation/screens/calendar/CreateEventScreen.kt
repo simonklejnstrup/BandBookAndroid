@@ -36,6 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.thebandbook.R
 import com.example.thebandbook.domain.model.EventType
 import com.example.thebandbook.navigation.NavigationEvent
+import com.example.thebandbook.presentation.screens.common.GreenWideButton
 import com.example.thebandbook.presentation.screens.forum.GrayDivider
 import com.example.thebandbook.presentation.viewmodels.CreateEventViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
@@ -147,21 +148,12 @@ fun NoteInputButton(
     onNoteChange: (String) -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    val shape = RoundedCornerShape(4.dp)
     var text by rememberSaveable { mutableStateOf(note) }
 
-    Button(
-        colors = ButtonDefaults.buttonColors(
-            containerColor =  MaterialTheme.colorScheme.tertiary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp),
-        shape = shape,
-        onClick = { showDialog = true }) {
-        Text(text = "Note")
-    }
+    GreenWideButton(
+        label = "Note",
+        onClick = {showDialog = true}
+    )
 
     if (showDialog) {
         Dialog(onDismissRequest = { showDialog = false }) {
@@ -196,7 +188,7 @@ fun NoteInputButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 6.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                             shape = RoundedCornerShape(4.dp),
                             onClick = {
                                 onNoteChange(text)
