@@ -1,9 +1,6 @@
 package com.example.thebandbook.presentation.screens.dashboard
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,9 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,13 +30,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.thebandbook.data.mockEvents
 import com.example.thebandbook.data.mockThreads
@@ -52,7 +44,8 @@ import com.example.thebandbook.presentation.screens.calendar.EventItem
 import com.example.thebandbook.presentation.screens.common.BottomSheetState
 import com.example.thebandbook.presentation.screens.common.EventDetailBottomSheet
 import com.example.thebandbook.presentation.screens.common.ThreadBottomSheet
-import com.example.thebandbook.presentation.screens.common.ThreadInfoRow
+import com.example.thebandbook.presentation.screens.common.ThreadBox
+import com.example.thebandbook.presentation.screens.common.CommentInfoRow
 import com.example.thebandbook.presentation.viewmodels.SharedEventDetailsBottomSheetViewModel
 import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
@@ -215,7 +208,6 @@ fun DashboardEventsSection(
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
-        //                contentPadding = PaddingValues(vertical = 17.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
 
@@ -250,78 +242,21 @@ fun ThreadListItem(
 ) {
     Column(
     ) {
-        ThreadInfoRow(
+        CommentInfoRow(
             modifier = Modifier.padding(start = 15.dp),
-            thread = thread
+            comment = thread.comments[0 ]
         )
         ThreadBox(
+            modifier = Modifier
+                .width(240.dp)
+                .height(200.dp),
             thread = thread,
             onThreadSelected = onThreadSelected,
         )
     }
 }
 
-@Composable
-fun ThreadBox(
-    thread: ForumThread,
-    onThreadSelected: (ForumThread) -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .width(240.dp)
-            .height(200.dp)
-            .background(
-                color = MaterialTheme.colorScheme.tertiaryContainer,
-                shape = RoundedCornerShape(size = 16.dp)
-            )
-            .clickable { onThreadSelected(thread) },
-    ) {
-        Box(
-            modifier = Modifier
-                .weight(5f)
-                .fillMaxSize()
-                .background(
-                    color = MaterialTheme.colorScheme.tertiaryContainer,
-                    shape = RoundedCornerShape(size = 16.dp)
-                )
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(10.dp),
-                text = thread.comments[0].content,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimary,
-                lineHeight = 14.sp,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-        Divider(
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f)
-        )
-        Row(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(end = 10.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val textColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = .5f)
-            Text(
-                text = "${thread.comments.size} comments",
-                style = MaterialTheme.typography.bodySmall,
-                color = textColor,
-            )
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = "Arrow right",
-                tint = textColor
-            )
-        }
 
-    }
-}
 
 @Composable
 fun DashboardHeader(
