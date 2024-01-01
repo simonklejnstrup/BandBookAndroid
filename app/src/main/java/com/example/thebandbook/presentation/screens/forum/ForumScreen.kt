@@ -54,7 +54,7 @@ import com.example.thebandbook.domain.model.ForumThread
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.presentation.screens.common.BottomSheetState
 import com.example.thebandbook.presentation.screens.common.ThreadBottomSheet
-import com.example.thebandbook.presentation.screens.common.ThreadInfoRow
+import com.example.thebandbook.presentation.screens.common.CommentInfoRow
 import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 import kotlinx.coroutines.launch
@@ -181,7 +181,7 @@ fun ThreadItem(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ThreadInfoRow(thread = thread)
+                    CommentInfoRow(comment = thread.comments[0])
 
                     // Makes the menu button align to the right
                     Spacer(modifier = Modifier.weight(1f))
@@ -226,7 +226,7 @@ fun GrayDivider() {
             .fillMaxWidth()
             .height(2.dp)
             .background(
-                color = MaterialTheme.colorScheme.primary.copy(alpha = .5f)
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = .5f)
             )
     )
 }
