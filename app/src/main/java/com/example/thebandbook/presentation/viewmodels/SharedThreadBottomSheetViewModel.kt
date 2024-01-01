@@ -13,6 +13,9 @@ class SharedThreadBottomSheetViewModel: ViewModel() {
     private val _selectedThread = MutableStateFlow<ForumThread?>(null)
     val selectedThread = _selectedThread.asStateFlow()
 
+    private val _textFieldValue = MutableStateFlow("")
+    val textFieldValue = _textFieldValue.asStateFlow()
+
     fun openBottomSheetWithThread(thread: ForumThread) {
         _selectedThread.value = thread
         _bottomSheetState.value = BottomSheetState.Open
@@ -21,5 +24,9 @@ class SharedThreadBottomSheetViewModel: ViewModel() {
     fun closeBottomSheet() {
         _selectedThread.value = null
         _bottomSheetState.value = BottomSheetState.Closed
+    }
+
+    fun submitComment(text: String, thread: ForumThread) {
+
     }
 }
