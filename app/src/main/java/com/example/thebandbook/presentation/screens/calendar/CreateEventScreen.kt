@@ -40,7 +40,6 @@ import com.example.thebandbook.presentation.screens.common.GreenWideButton
 import com.example.thebandbook.presentation.screens.forum.GrayDivider
 import com.example.thebandbook.presentation.viewmodels.CreateEventViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
-import com.example.thebandbook.util.CustomSwitch
 import com.example.thebandbook.util.VSpacer
 import java.time.LocalDate
 import java.time.LocalTime
@@ -606,29 +605,44 @@ fun SetConcertInfoPickerRow(
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Spacer(
-            modifier = Modifier.weight(2f)
+        Text(
+            modifier = Modifier.weight(1f),
+            text = "Set info",
+            color = MaterialTheme.colorScheme.onPrimary,
+            style = MaterialTheme.typography.bodyLarge
         )
-        NumberOfSetsPicker(
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        val selectedSetLength = viewModel.selectedSetLength.collectAsState()
+        val selectedNumberOfSets = viewModel.selectedNumberOfSets.collectAsState()
+        println(
+            "Selected Set Length: ${selectedSetLength.value} Selected number of sets: ${selectedNumberOfSets.value  }"
+        )
+
+        LightingNumberPicker(
             modifier = Modifier
                 .weight(2f),
-            selectedNumber = 1,
+            numbers = listOf(1, 2, 3, 4),
             onNumberSelected = { newNumber -> viewModel.setNumberOfSets(newNumber) },
-            viewModel = viewModel,
+            selectedNumber = selectedSetLength.value,
         )
+
         Icon(
             modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .size(15.dp),
+                .padding(horizontal = 15.dp)
+                .size(25.dp)
+                .weight(1f),
             imageVector = Icons.Filled.Clear,
             contentDescription = "Multiply icon",
             tint = MaterialTheme.colorScheme.primary
         )
-        SetLengthSwitchWithLabel(
+            LightingNumberPicker(
             modifier = Modifier
-                .padding(5.dp)
-                .weight(1f),
-            viewModel = viewModel
+                .weight(1.5f),
+            numbers = listOf(45, 60),
+            onNumberSelected = { newNumber -> viewModel.setSetLength(newNumber) },
+            selectedNumber = selectedNumberOfSets.value,
         )
     }
 }
@@ -839,7 +853,7 @@ fun DoneByTimePickerRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Get out",
+            text = "Concert curfew",
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -852,67 +866,35 @@ fun DoneByTimePickerRow(
     }
 }
 
-@Composable
-fun SetLengthSwitchWithLabel(
-    modifier: Modifier = Modifier,
-    viewModel: CreateEventViewModel
-) {
-    val onPrimary30 = MaterialTheme.colorScheme.onPrimary.copy(0.3f)
-    val onPrimary = MaterialTheme.colorScheme.onPrimary
-    Column {
-        Row {
-            Text(
-                text = "45 min",
-                color = if (viewModel.switchState.value) onPrimary30 else onPrimary,
-                style = MaterialTheme.typography.labelSmall
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = "60 min",
-                color = if (viewModel.switchState.value) onPrimary else onPrimary30,
-                style = MaterialTheme.typography.labelSmall
-            )
 
-        }
-        Spacer(Modifier.height(5.dp))
-        CustomSwitch(
-            checked = viewModel.switchState.value,
-            onCheckedChange = { isChecked ->
-                viewModel.onLengthOfSetPressed(isChecked)
-                viewModel.switchState.value = isChecked
-            },
-            modifier = Modifier
-                .padding(end = 12.dp)
-        )
-    }
-}
+
 
 @Composable
-fun NumberOfSetsPicker(
+fun LightingNumberPicker(
     modifier: Modifier = Modifier,
-    selectedNumber: Int,
+    numbers: List<Int>, // Add a parameter for the list of numbers
     onNumberSelected: (Int) -> Unit,
-    viewModel: CreateEventViewModel
+    selectedNumber: Int,
 ) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
     ) {
-        // Numbers 1 to 4
-        (1..4).forEach { number ->
+        numbers.forEach { number -> // Use the provided list of numbers
+
             Text(
                 text = number.toString(),
                 style = MaterialTheme.typography.headlineLarge,
-                color = if (viewModel.eventData.value.numberOfSets == number) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimary.copy(
-                    0.3f
-                ),
-                modifier = Modifier
+                color = if (number == selectedNumber) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimary.copy(0.5f),                modifier = Modifier
                     .padding(1.dp)
-                    .clickable { onNumberSelected(number) }
+                    .clickable { onNumberSelected(number) },
+                maxLines = 1
             )
         }
     }
 }
+
 
 @Preview(showBackground = false)
 @Composable

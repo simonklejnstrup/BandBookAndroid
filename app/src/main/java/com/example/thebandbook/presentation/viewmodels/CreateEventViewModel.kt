@@ -1,6 +1,5 @@
 package com.example.thebandbook.presentation.viewmodels
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -19,10 +18,15 @@ import java.time.LocalTime
 open class CreateEventViewModel : ViewModel() {
     private val _eventData = MutableStateFlow(EventData())
     open val eventData = _eventData.asStateFlow()
-    val switchState: MutableState<Boolean> = mutableStateOf(false)
 
     private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
     val navigationEvent = _navigationEvent.asSharedFlow()
+
+    private val _selectedSetLength = MutableStateFlow(45)
+    val selectedSetLength = _selectedSetLength.asStateFlow()
+
+    private val _selectedNumberOfSets = MutableStateFlow(2)
+    val selectedNumberOfSets = _selectedNumberOfSets.asStateFlow()
 
     suspend fun onBackPressed() {
         _navigationEvent.emit(NavigationEvent.NavigateBack)
@@ -89,6 +93,7 @@ open class CreateEventViewModel : ViewModel() {
     }
     fun setNumberOfSets(numberOfSets: Int) {
         _eventData.value = eventData.value.copy(numberOfSets = numberOfSets)
+
     }
 
     fun setNote(note: String) {
@@ -99,13 +104,14 @@ open class CreateEventViewModel : ViewModel() {
         _eventData.value = eventData.value.copy(type = type)
     }
 
-    fun onLengthOfSetPressed(isChecked: Boolean) {
-        _eventData.value = eventData.value.copy(lengthOfEachSet = if (isChecked) 60 else 45)
+    fun setSetLength(setLength: Int) {
+        _eventData.value = eventData.value.copy(lengthOfEachSet = setLength)
     }
 
 
     // Function to submit the event data
     fun submitEvent() {
+        println(eventData.value)
         viewModelScope.launch {
             try {
                 val response = apiService.createEvent(eventData.value)
