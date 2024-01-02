@@ -59,6 +59,7 @@ fun CreateEventScreen(navController: NavController) {
         viewModel.navigationEvent.collect { event ->
             when (event) {
                 is NavigationEvent.NavigateBack -> navController.popBackStack()
+                else -> {}
             }
         }
     }
@@ -606,18 +607,10 @@ fun SetConcertInfoPickerRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            modifier = Modifier.weight(1f),
-            text = "Set info",
+            modifier = Modifier.weight(2.5f),
+            text = "Showstructure",
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.bodyLarge
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        val selectedSetLength = viewModel.selectedSetLength.collectAsState()
-        val selectedNumberOfSets = viewModel.selectedNumberOfSets.collectAsState()
-        println(
-            "Selected Set Length: ${selectedSetLength.value} Selected number of sets: ${selectedNumberOfSets.value  }"
         )
 
         LightingNumberPicker(
@@ -625,12 +618,12 @@ fun SetConcertInfoPickerRow(
                 .weight(2f),
             numbers = listOf(1, 2, 3, 4),
             onNumberSelected = { newNumber -> viewModel.setNumberOfSets(newNumber) },
-            selectedNumber = selectedSetLength.value,
+            selectedNumber = eventData.numberOfSets,
         )
 
         Icon(
             modifier = Modifier
-                .padding(horizontal = 15.dp)
+                .padding(horizontal = 6.dp)
                 .size(25.dp)
                 .weight(1f),
             imageVector = Icons.Filled.Clear,
@@ -642,7 +635,7 @@ fun SetConcertInfoPickerRow(
                 .weight(1.5f),
             numbers = listOf(45, 60),
             onNumberSelected = { newNumber -> viewModel.setSetLength(newNumber) },
-            selectedNumber = selectedNumberOfSets.value,
+            selectedNumber = eventData.lengthOfEachSet,
         )
     }
 }
@@ -853,7 +846,7 @@ fun DoneByTimePickerRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Concert curfew",
+            text = "Curfew",
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -886,7 +879,7 @@ fun LightingNumberPicker(
             Text(
                 text = number.toString(),
                 style = MaterialTheme.typography.headlineLarge,
-                color = if (number == selectedNumber) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimary.copy(0.5f),                modifier = Modifier
+                color = if (number == selectedNumber) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimary.copy(0.4f),                modifier = Modifier
                     .padding(1.dp)
                     .clickable { onNumberSelected(number) },
                 maxLines = 1

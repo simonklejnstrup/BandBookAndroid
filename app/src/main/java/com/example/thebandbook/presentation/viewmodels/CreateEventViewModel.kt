@@ -22,12 +22,6 @@ open class CreateEventViewModel : ViewModel() {
     private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
     val navigationEvent = _navigationEvent.asSharedFlow()
 
-    private val _selectedSetLength = MutableStateFlow(45)
-    val selectedSetLength = _selectedSetLength.asStateFlow()
-
-    private val _selectedNumberOfSets = MutableStateFlow(2)
-    val selectedNumberOfSets = _selectedNumberOfSets.asStateFlow()
-
     suspend fun onBackPressed() {
         _navigationEvent.emit(NavigationEvent.NavigateBack)
     }
@@ -45,7 +39,6 @@ open class CreateEventViewModel : ViewModel() {
 
     fun setDate(date: LocalDate) {
         _eventData.value = eventData.value.copy(date = date)
-        println("Dette er datoen ${eventData.value.date}")
     }
 
     fun setTimeOfGetIn(time: LocalTime) {
