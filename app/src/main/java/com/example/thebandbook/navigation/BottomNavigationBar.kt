@@ -73,5 +73,5 @@ fun BottomNavigationBar(navController: NavController) {
 val featureGroups = mapOf(
     "Calendar" to listOf(AppRoutes.CALENDAR, AppRoutes.CREATE_EVENT_SCREEN),
     "Forum" to listOf(AppRoutes.FORUM, AppRoutes.FORUM_CREATE_THREAD),
-    "Dashboard" to listOf(AppRoutes.DASHBOARD)
+    "Dashboard" to listOf(AppRoutes.DASHBOARD, AppRoutes.SIGN_UP_SCREEN)
 )

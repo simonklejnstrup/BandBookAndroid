@@ -17,6 +17,7 @@ import com.example.thebandbook.presentation.screens.forum.ForumScreen
 import com.example.thebandbook.presentation.screens.calendar.CalendarScreen
 import com.example.thebandbook.navigation.BottomNavigationBar
 import com.example.thebandbook.presentation.screens.calendar.CreateEventScreen
+import com.example.thebandbook.presentation.screens.authentication.SignUpScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +43,8 @@ fun AppContent() {
             composable(AppRoutes.CREATE_EVENT_SCREEN) { CreateEventScreen(navController) }
             composable(AppRoutes.FORUM) { ForumScreen(navController) }
             composable(AppRoutes.FORUM_CREATE_THREAD) { ForumCreateThreadScreen() }
-            composable(AppRoutes.DASHBOARD) { DashboardScreen() }
+            composable(AppRoutes.DASHBOARD) { DashboardScreen(navController = navController) }
+            composable(AppRoutes.SIGN_UP_SCREEN) { SignUpScreen() }
         }
     }
 }
