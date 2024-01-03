@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,14 +35,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.thebandbook.R
 import com.example.thebandbook.data.mockEvents
 import com.example.thebandbook.data.mockThreads
@@ -49,6 +55,7 @@ import com.example.thebandbook.domain.model.ForumThread
 import com.example.thebandbook.domain.model.User
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.navigation.NavigationEvent
+import com.example.thebandbook.presentation.firebase.sign_in.FirebaseUserData
 import com.example.thebandbook.presentation.screens.authentication.SignInScreen
 import com.example.thebandbook.presentation.screens.calendar.EventItem
 import com.example.thebandbook.presentation.screens.common.BottomSheetState
@@ -67,6 +74,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
+    userData: FirebaseUserData?,
+    onSignOut: () -> Unit,
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
@@ -131,34 +140,59 @@ fun DashboardScreen(
                 .padding(16.dp),
             color = MaterialTheme.colorScheme.background
         ) {
-            var isLoggedIn by rememberSaveable { mutableStateOf(true) }
-            var currentUser: User = User(
-                id = 1,
-                firstname = "Simon",
-                lastname = "Klejnstrup",
-                email = "ok@ok.dk",
-                band = "Balkan Basterds"
-            )
+            TheBandBookTheme {
+                userData?.let {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            if(userData?.profilePictureUrl != null) {
+                                AsyncImage(model = userData.profilePictureUrl,
+                                    contentDescription = "Profile picture",
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .clip(CircleShape),
+                                    contentScale = ContentScale.Crop)
+                            }
+                            Button(
+                                onClick = onSignOut,
+                            ) {
+                                Text(text = "Sign out")
+                            }
+                        }
+                        if (userData?.name != null) {
+                            Text(
+                                text = userData.name,
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.titleMedium)
+                        }
+//                    DashboardHeader(
+//                        onSettingsClick = onSettingsClick,
+//                        user = user
+//                    )
+                        VSpacer(height = 10.dp)
+                        Divider(
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
+                        )
+                        VSpacer(height = 10.dp)
+                        DashboardThreadsSection(onThreadSelected = {
+//                            onThreadSelected
 
-
-//        if (isLoggedIn) {
-//            DashboardLoggedInContent(
-//                user = currentUser,
-//                onSettingsClick = {
-////                    dashboardViewModel.openDashboardBottomSheet()
-//                                  },
-//                onThreadSelected = { forumThread ->
-//                    sharedThreadBottomSheetViewModel.openBottomSheetWithThread(forumThread)
-//                },
-//                onEventSelected = { event ->
-//                    sharedEventDetailsViewModel.openBottomSheetWithEvent(event)
-//                }
-//            )
-
-//        } else {
-            DashboardNotLoggedInContent(navController = navController)
-//        }
-
+                        }
+                        )
+                        VSpacer(height = 10.dp)
+                        DashboardEventsSection(onEventSelected =
+                        {
+//                        onEventSelected
+                        }
+                        )
+                    }
+                }
+            }
             // Compensate for Bottom Navigation Bar
             VSpacer(height = 80.dp)
         }
@@ -313,7 +347,7 @@ fun DashboardHeader(
 fun DashboardNotLoggedInContent(
     navController: NavController
 ) {
-    SignInScreen(navController)
+//    SignInScreen(navController)
 }
 
 

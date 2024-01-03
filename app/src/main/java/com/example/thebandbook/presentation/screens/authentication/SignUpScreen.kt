@@ -76,14 +76,10 @@ fun SignUpScreen(
             GreenWideButton(
                 label = "Log in",
                 onClick = {
-                viewModel.onSignUpPressed()
-
+                    viewModel.onSignUpPressed()
                 })
-
         }
-
     }
-
 }
 
 @Composable
