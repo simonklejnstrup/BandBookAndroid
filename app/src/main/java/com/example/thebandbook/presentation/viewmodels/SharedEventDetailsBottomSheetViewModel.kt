@@ -2,7 +2,7 @@ package com.example.thebandbook.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.example.thebandbook.domain.model.Event
-import com.example.thebandbook.presentation.screens.common.BottomSheetState
+import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
