@@ -1,6 +1,10 @@
 package com.example.thebandbook.presentation.screens.authentication
 
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,33 +21,68 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.thebandbook.authentication.GoogleAuthClientSingleton
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.navigation.NavigationEvent
-import com.example.thebandbook.presentation.firebase.sign_in.SignInState
 import com.example.thebandbook.presentation.screens.common.GreenWideButton
 import com.example.thebandbook.presentation.screens.common.PasswordTextField
+import com.example.thebandbook.presentation.screens.common.VSpacer
 import com.example.thebandbook.presentation.screens.common.WideOutlinedTextFieldWithStartIcon
 import com.example.thebandbook.presentation.screens.dashboard.TitleAndLogoRow
+import com.example.thebandbook.presentation.viewmodels.FirebaseSignInViewmodel
 import com.example.thebandbook.presentation.viewmodels.SignInViewModel
-import com.example.thebandbook.util.VSpacer
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
-    state: SignInState,
-    onGoogleSignInClick: () -> Unit,
+//    state: SignInState,
+//    onGoogleSignInClick: () -> Unit,
     navController: NavController
 ) {
+    val firebaseSignInViewModel = viewModel<FirebaseSignInViewmodel>()
+    val state by firebaseSignInViewModel.signInState.collectAsStateWithLifecycle()
     val viewModel: SignInViewModel = viewModel()
     val signInData by viewModel.signInData.collectAsState()
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = Unit) {
+        if (GoogleAuthClientSingleton.googleAuthUiClient.getSignedInUser() != null) {
+            navController.navigate(AppRoutes.DASHBOARD)
+        }
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = { result ->
+            if (result.resultCode == ComponentActivity.RESULT_OK) {
+                coroutineScope.launch {
+                    val signInResult =
+                        GoogleAuthClientSingleton.googleAuthUiClient.signInWithIntent(
+                            intent = result.data ?: return@launch
+                        )
+                    firebaseSignInViewModel.onSingInResult(signInResult)
+                }
+            }
+        })
+
+    LaunchedEffect(key1 = state.isSignInSuccesful) {
+        if (state.isSignInSuccesful) {
+            navController.navigate(AppRoutes.DASHBOARD)
+            firebaseSignInViewModel.resetState()
+        }
+    }
+
 
     LaunchedEffect(key1 = state.signInErrorMessage) {
         state.signInErrorMessage?.let { error ->
@@ -80,7 +118,7 @@ fun SignInScreen(
             modifier = Modifier,
             value = signInData.email,
             label = "Mail",
-            onValueChange = {viewModel.setEmail(it)},
+            onValueChange = { viewModel.setEmail(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
 
@@ -97,7 +135,7 @@ fun SignInScreen(
             viewModel.navigateToSignUpScreen()
         }) {
             Text(
-                text =  "Sign up",
+                text = "Sign up",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight(600)
@@ -110,27 +148,38 @@ fun SignInScreen(
         GreenWideButton(
             label = "Sign in",
             onClick = { //Todo:
-             } )
-    }
+            })
 
-    VSpacer(height = 70.dp)
+        VSpacer(height = 70.dp)
 
-    Button(onClick = onGoogleSignInClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.onPrimary
-            ),
-        shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.inversePrimary,
-            disabledContentColor = MaterialTheme.colorScheme.surface
-        )
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    val signInIntentSender = GoogleAuthClientSingleton.googleAuthUiClient.signIn()
+                    launcher.launch(
+                        IntentSenderRequest.Builder(
+                            signInIntentSender ?: return@launch
+                        ).build()
+                    )
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(4.dp)
+                ),
+            shape = RoundedCornerShape(4.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                disabledContainerColor = MaterialTheme.colorScheme.inversePrimary,
+                disabledContentColor = MaterialTheme.colorScheme.surface
+            )
 
-    ) {
-
+        ) {
+            Text("Sign in with Google")
+        }
     }
 }
