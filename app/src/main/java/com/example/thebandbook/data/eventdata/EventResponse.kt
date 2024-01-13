@@ -1,4 +1,4 @@
-package com.example.thebandbook.data
+package com.example.thebandbook.data.eventdata
 
 
 data class EventResponse(
