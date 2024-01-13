@@ -1,4 +1,4 @@
-package com.example.thebandbook.util
+package com.example.thebandbook.presentation.screens.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
