@@ -1,10 +1,10 @@
-package com.example.thebandbook.data
+package com.example.thebandbook.data.eventdata
 
 import com.example.thebandbook.domain.model.Event
 import java.time.LocalDate
 import java.time.LocalTime
 
-val mockEvents = listOf(
+val mockEvents = mutableListOf(
     Event(
         id = 1,
         title = "Mock Music Festival",
