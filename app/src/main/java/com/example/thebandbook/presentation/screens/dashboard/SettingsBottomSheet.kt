@@ -15,7 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.thebandbook.presentation.screens.common.BottomSheetState
+import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
 import com.example.thebandbook.presentation.screens.common.RedWideButton
 import com.example.thebandbook.presentation.viewmodels.DashboardViewModel
 import kotlinx.coroutines.launch
