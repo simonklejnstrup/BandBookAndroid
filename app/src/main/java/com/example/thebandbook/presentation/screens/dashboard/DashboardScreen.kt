@@ -29,10 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,33 +45,30 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.thebandbook.R
-import com.example.thebandbook.data.mockEvents
-import com.example.thebandbook.data.mockThreads
+import com.example.thebandbook.data.eventdata.mockEvents
+import com.example.thebandbook.data.threaddata.mockThreads
 import com.example.thebandbook.domain.model.Event
 import com.example.thebandbook.domain.model.ForumThread
 import com.example.thebandbook.domain.model.User
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.navigation.NavigationEvent
-import com.example.thebandbook.presentation.firebase.sign_in.FirebaseUserData
-import com.example.thebandbook.presentation.screens.authentication.SignInScreen
 import com.example.thebandbook.presentation.screens.calendar.EventItem
-import com.example.thebandbook.presentation.screens.common.BottomSheetState
+import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
 import com.example.thebandbook.presentation.screens.common.CommentInfoRow
-import com.example.thebandbook.presentation.screens.common.EventDetailBottomSheet
-import com.example.thebandbook.presentation.screens.common.ThreadBottomSheet
+import com.example.thebandbook.presentation.bottomsheets.EventDetailBottomSheet
+import com.example.thebandbook.presentation.bottomsheets.ThreadBottomSheet
 import com.example.thebandbook.presentation.screens.common.ThreadBox
 import com.example.thebandbook.presentation.viewmodels.DashboardViewModel
 import com.example.thebandbook.presentation.viewmodels.SharedEventDetailsBottomSheetViewModel
 import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
-import com.example.thebandbook.util.HSpacer
-import com.example.thebandbook.util.VSpacer
+import com.example.thebandbook.presentation.screens.common.HSpacer
+import com.example.thebandbook.presentation.screens.common.VSpacer
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
-    userData: FirebaseUserData?,
     onSignOut: () -> Unit,
     modifier: Modifier = Modifier,
     navController: NavController
@@ -141,7 +135,7 @@ fun DashboardScreen(
             color = MaterialTheme.colorScheme.background
         ) {
             TheBandBookTheme {
-                userData?.let {
+                dashboardViewModel.userData?.let {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -149,8 +143,8 @@ fun DashboardScreen(
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            if(userData?.profilePictureUrl != null) {
-                                AsyncImage(model = userData.profilePictureUrl,
+                            if(dashboardViewModel.userData?.profilePictureUrl != null) {
+                                AsyncImage(model = dashboardViewModel.userData.profilePictureUrl,
                                     contentDescription = "Profile picture",
                                     modifier = Modifier
                                         .size(100.dp)
@@ -163,9 +157,9 @@ fun DashboardScreen(
                                 Text(text = "Sign out")
                             }
                         }
-                        if (userData?.name != null) {
+                        if (dashboardViewModel.userData?.name != null) {
                             Text(
-                                text = userData.name,
+                                text = dashboardViewModel.userData.name,
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.titleMedium)
                         }
