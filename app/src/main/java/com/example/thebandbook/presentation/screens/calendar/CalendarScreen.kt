@@ -58,16 +58,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.thebandbook.R
-import com.example.thebandbook.data.mockEvents
+import com.example.thebandbook.authentication.AuthViewModel
+import com.example.thebandbook.data.eventdata.mockEvents
 import com.example.thebandbook.domain.model.Event
 import com.example.thebandbook.domain.model.EventType
 import com.example.thebandbook.navigation.AppRoutes
-import com.example.thebandbook.presentation.screens.common.BottomSheetState
-import com.example.thebandbook.presentation.screens.common.EventDetailBottomSheet
+import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
+import com.example.thebandbook.presentation.bottomsheets.EventDetailBottomSheet
 import com.example.thebandbook.presentation.viewmodels.SharedEventDetailsBottomSheetViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
-import com.example.thebandbook.util.HSpacer
-import com.example.thebandbook.util.VSpacer
+import com.example.thebandbook.presentation.screens.common.HSpacer
+import com.example.thebandbook.presentation.screens.common.VSpacer
 import com.example.thebandbook.util.openMap
 import kotlinx.coroutines.launch
 import java.time.LocalTime
@@ -81,6 +82,7 @@ fun CalendarScreen(
     modifier: Modifier = Modifier
 ) {
     val sharedViewModel: SharedEventDetailsBottomSheetViewModel = viewModel()
+    val authViewModel: AuthViewModel = viewModel()
     val bottomSheetState by sharedViewModel.bottomSheetState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -111,7 +113,9 @@ fun CalendarScreen(
 
                 Box {
 
-                    val eventsGroupedByYear = mockEvents.groupBy { it.date.year }
+                    val eventsGroupedByYear = mockEvents
+                        .sortedBy { it.date }
+                        .groupBy { it.date.year }
 
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
