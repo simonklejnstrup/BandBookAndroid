@@ -1,4 +1,4 @@
-package com.example.thebandbook.presentation.screens.common
+package com.example.thebandbook.presentation.bottomsheets
 
 import android.content.Intent
 import android.net.Uri
@@ -40,9 +40,9 @@ import com.example.thebandbook.presentation.screens.calendar.FinanceSection
 import com.example.thebandbook.presentation.screens.calendar.MapButton
 import com.example.thebandbook.presentation.screens.calendar.NoteSection
 import com.example.thebandbook.presentation.screens.calendar.ScheduleSection
+import com.example.thebandbook.presentation.screens.common.HSpacer
+import com.example.thebandbook.presentation.screens.common.VSpacer
 import com.example.thebandbook.presentation.viewmodels.SharedEventDetailsBottomSheetViewModel
-import com.example.thebandbook.util.HSpacer
-import com.example.thebandbook.util.VSpacer
 import com.example.thebandbook.util.openMap
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
