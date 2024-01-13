@@ -1,4 +1,4 @@
-package com.example.thebandbook.presentation.firebase.sign_in
+package com.example.thebandbook.authentication.firebase.sign_in
 
 import android.content.Context
 import android.content.Intent
