@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.thebandbook.data.apiService
+import com.example.thebandbook.data.eventdata.eventApiService
 import com.example.thebandbook.domain.model.EventType
 import com.example.thebandbook.navigation.NavigationEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,11 +16,12 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 open class CreateEventViewModel : ViewModel() {
-    private val _eventData = MutableStateFlow(EventData())
-    open val eventData = _eventData.asStateFlow()
 
     private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
     val navigationEvent = _navigationEvent.asSharedFlow()
+
+    private val _eventData = MutableStateFlow(EventData())
+    open val eventData = _eventData.asStateFlow()
 
     suspend fun onBackPressed() {
         _navigationEvent.emit(NavigationEvent.NavigateBack)
@@ -104,14 +105,15 @@ open class CreateEventViewModel : ViewModel() {
 
     // Function to submit the event data
     fun submitEvent() {
-        println(eventData.value)
         viewModelScope.launch {
             try {
-                val response = apiService.createEvent(eventData.value)
+                val response = eventApiService.createEvent(eventData.value)
                 if (response.isSuccessful) {
                     println("POST request Succesful")
+                    _navigationEvent.emit(NavigationEvent.NavigateToCalendar)
                 } else {
                     println("POST request failed")
+
                 }
             } catch (e: Exception) {
                 _navigationEvent.emit(NavigationEvent.NavigateBack)
@@ -133,7 +135,7 @@ open class CreateEventViewModel : ViewModel() {
     data class EventData(
         val title: String = "",
         val address: String = "",
-        val date: LocalDate? = null,
+        val date: LocalDate = LocalDate.now(),
         val timeOfGetIn: LocalTime = LocalTime.now(),
         val timeOfSoundcheck: LocalTime = LocalTime.now(),
         val timeOfConcert: LocalTime = LocalTime.now(),
