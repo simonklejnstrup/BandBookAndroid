@@ -24,7 +24,7 @@ import com.example.thebandbook.presentation.screens.common.WideOutlinedTextField
 import com.example.thebandbook.presentation.screens.forum.GrayDivider
 import com.example.thebandbook.presentation.viewmodels.SignUpViewmodel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
-import com.example.thebandbook.util.VSpacer
+import com.example.thebandbook.presentation.screens.common.VSpacer
 
 @Composable
 fun SignUpScreen(
