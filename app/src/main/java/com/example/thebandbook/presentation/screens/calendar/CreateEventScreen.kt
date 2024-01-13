@@ -35,12 +35,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.thebandbook.R
 import com.example.thebandbook.domain.model.EventType
+import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.navigation.NavigationEvent
 import com.example.thebandbook.presentation.screens.common.GreenWideButton
+import com.example.thebandbook.presentation.screens.common.SubmitButton
 import com.example.thebandbook.presentation.screens.forum.GrayDivider
 import com.example.thebandbook.presentation.viewmodels.CreateEventViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
-import com.example.thebandbook.util.VSpacer
+import com.example.thebandbook.presentation.screens.common.VSpacer
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -59,6 +61,7 @@ fun CreateEventScreen(navController: NavController) {
         viewModel.navigationEvent.collect { event ->
             when (event) {
                 is NavigationEvent.NavigateBack -> navController.popBackStack()
+                is NavigationEvent.NavigateToCalendar -> navController.navigate(AppRoutes.CALENDAR)
                 else -> {}
             }
         }
@@ -141,7 +144,6 @@ fun CreateEventScreen(navController: NavController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteInputButton(
     note: String,
@@ -204,7 +206,6 @@ fun NoteInputButton(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactPersonInputRow(
     viewModel: CreateEventViewModel,
@@ -267,20 +268,11 @@ fun NavigationAndSaveRow(
         Spacer(modifier = Modifier.weight(1f))
 
         // Submit Button
-        Button(
-            shape = RoundedCornerShape(4.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor =  MaterialTheme.colorScheme.tertiary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ),
-            onClick = { viewModel.submitEvent() },
-        ) {
-            Text("Submit")
-        }
+        SubmitButton(onClick = { viewModel.submitEvent() })
+
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddressTextField(
     viewModel: CreateEventViewModel,
@@ -303,7 +295,6 @@ fun AddressTextField(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TitleTextField(
     viewModel: CreateEventViewModel,
