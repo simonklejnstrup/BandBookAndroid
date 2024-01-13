@@ -1,11 +1,10 @@
 package com.example.thebandbook.domain.model
 
 import java.time.Instant
-import java.time.LocalDateTime
 
 data class ForumThread (
     val id: Int,
-    var title: String,
+    var title: String?,
     var createdBy: String,
     var createdAt: Instant,
     var comments: MutableList<Comment> = mutableListOf()
