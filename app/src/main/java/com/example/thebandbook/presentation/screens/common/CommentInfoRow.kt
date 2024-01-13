@@ -8,7 +8,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.thebandbook.domain.model.Comment
 import com.example.thebandbook.ui.theme.TheBandBookTheme
-import com.example.thebandbook.util.RedVerticalDivider
 import com.example.thebandbook.util.formatInstantToDateAndMonth
 import com.example.thebandbook.util.formatInstantToHoursAndMinutes
 
