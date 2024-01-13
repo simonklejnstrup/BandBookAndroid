@@ -49,11 +49,11 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.thebandbook.data.mockThreads
+import com.example.thebandbook.data.threaddata.mockThreads
 import com.example.thebandbook.domain.model.ForumThread
 import com.example.thebandbook.navigation.AppRoutes
-import com.example.thebandbook.presentation.screens.common.BottomSheetState
-import com.example.thebandbook.presentation.screens.common.ThreadBottomSheet
+import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
+import com.example.thebandbook.presentation.bottomsheets.ThreadBottomSheet
 import com.example.thebandbook.presentation.screens.common.CommentInfoRow
 import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
@@ -205,7 +205,7 @@ fun ThreadItem(
             ) {
                 val onPrimary50 = MaterialTheme.colorScheme.onPrimary.copy(alpha = .5f)
                 Text(
-                    text = "17 comments",
+                    text = "${thread.comments.size} comments",
                     color = onPrimary50,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight(700)
