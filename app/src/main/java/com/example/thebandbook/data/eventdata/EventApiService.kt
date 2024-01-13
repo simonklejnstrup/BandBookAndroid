@@ -1,4 +1,4 @@
-package com.example.thebandbook.data
+package com.example.thebandbook.data.eventdata
 
 import com.example.thebandbook.presentation.viewmodels.CreateEventViewModel
 import retrofit2.Response
