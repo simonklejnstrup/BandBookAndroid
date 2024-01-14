@@ -28,9 +28,6 @@ class SharedThreadBottomSheetViewModel: ViewModel() {
     private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
     val navigationEvent = _navigationEvent.asSharedFlow()
 
-    private val _threadState = MutableStateFlow<ForumThread?>(null)
-    val threadState: StateFlow<ForumThread?> = _threadState
-
     fun openBottomSheetWithThread(thread: ForumThread) {
         _selectedThread.value = thread
         _bottomSheetState.value = BottomSheetState.Open
@@ -62,7 +59,7 @@ class SharedThreadBottomSheetViewModel: ViewModel() {
 
             // Update the thread with the new list of comments
             val updatedThread = thread.copy(comments = updatedCommentsMutableList)
-            _threadState.value = updatedThread
+            _selectedThread.value = updatedThread
         }
 
         viewModelScope.launch {
