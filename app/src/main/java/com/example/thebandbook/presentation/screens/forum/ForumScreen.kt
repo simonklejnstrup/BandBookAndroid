@@ -18,13 +18,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,10 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -45,7 +38,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -55,6 +47,7 @@ import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
 import com.example.thebandbook.presentation.bottomsheets.ThreadBottomSheet
 import com.example.thebandbook.presentation.screens.common.CommentInfoRow
+import com.example.thebandbook.presentation.screens.common.ThreeDotMenu
 import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 import kotlinx.coroutines.launch
@@ -101,11 +94,14 @@ fun ForumScreen(
 
                 Box {
 
+                    // Sort the threads by createdAt date in descending order (newest first)
+                    val sortedThreads = mockThreads.sortedByDescending { it.createdAt }
+
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(17.dp),
                     ) {
-                        items(mockThreads) { thread ->
+                        items(sortedThreads) { thread ->
                             ThreadItem(
                                 thread,
                                 onClick = {sharedThreadBottomSheetViewModel.openBottomSheetWithThread(thread)})
@@ -182,10 +178,6 @@ fun ThreadItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CommentInfoRow(comment = thread.comments[0])
-
-                    // Makes the menu button align to the right
-                    Spacer(modifier = Modifier.weight(1f))
-                    ThreeDotMenu()
                 }
                 Text(
                     modifier = Modifier.padding(top = 12.dp),
@@ -229,34 +221,6 @@ fun GrayDivider() {
                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = .5f)
             )
     )
-}
-
-@Composable
-fun ThreeDotMenu() {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box {
-        IconButton(onClick = { expanded = true }) {
-            Icon(
-                Icons.Default.MoreVert, contentDescription = "More options",
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            properties = PopupProperties(focusable = true)
-        ) {
-            DropdownMenuItem(
-                text = { Text("Edit") },
-                onClick = {
-                    // Todo: Handle  click
-                    expanded = false
-                }
-            )
-        }
-    }
 }
 
 @Preview(showBackground = true)
