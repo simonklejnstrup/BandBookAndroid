@@ -44,6 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.thebandbook.data.threaddata.mockThreads
 import com.example.thebandbook.domain.model.ForumThread
 import com.example.thebandbook.navigation.AppRoutes
+import com.example.thebandbook.navigation.NavigationEvent
 import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
 import com.example.thebandbook.presentation.bottomsheets.ThreadBottomSheet
 import com.example.thebandbook.presentation.screens.common.CommentInfoRow
@@ -68,6 +69,19 @@ fun ForumScreen(
             BottomSheetState.Closed -> coroutineScope.launch { threadModalBottomSheetState.hide() }
         }
     }
+    // Observe navigation events
+    LaunchedEffect(key1 = Unit) {
+        sharedThreadBottomSheetViewModel.navigationEvent.collect { event ->
+            when (event) {
+                is NavigationEvent.NavigateToForumThreadScreen -> {
+                    val route = "${AppRoutes.FORUM_VIEW_THREAD}/${event.threadId}"
+                    navController.navigate(route)
+                }
+                else -> { }
+            }
+        }
+    }
+
     TheBandBookTheme {
 
         Surface(
@@ -104,7 +118,7 @@ fun ForumScreen(
                         items(sortedThreads) { thread ->
                             ThreadItem(
                                 thread,
-                                onClick = {sharedThreadBottomSheetViewModel.openBottomSheetWithThread(thread)})
+                                onClick = {sharedThreadBottomSheetViewModel.navigateToForumThreadScreen(thread)})
                         }
                         // Frees the last card from the bottom nav
                         item {
