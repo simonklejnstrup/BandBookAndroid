@@ -9,7 +9,7 @@ import kotlin.random.Random
 
 class MockThreadApiService {
 
-    fun createThread(content: String, currentUser: FirebaseUserData?): Response<ForumThread> {
+    fun createThread(content: String, currentUser: FirebaseUserData): Response<ForumThread> {
         val threadId = Random.nextInt()
         val newThread = currentUser?.name?.let {
             ForumThread(
@@ -34,5 +34,14 @@ class MockThreadApiService {
 
         // Simulate a successful response
         return Response.success(newThread)
+    }
+
+
+    fun getThreadById(threadId: Int): Response<ForumThread?> {
+
+        val thread = mockThreads.find { it.id == threadId }
+        println("getThreadById  $thread")
+        println("getThreadById, threadId =  $threadId")
+        return Response.success(thread) // Wrap the result in a Retrofit Response object
     }
 }
