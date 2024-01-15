@@ -4,7 +4,7 @@
 
 ## Introduction
 
-BandBook lest bandmembers easily schedule band related events and get in contact in message-threads.
+BandBook lets bandmembers easily schedule band related events and get in contact in message-threads.
 
 ## Features
 
