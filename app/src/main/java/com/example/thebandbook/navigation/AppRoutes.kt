@@ -7,5 +7,6 @@ object AppRoutes {
     const val CALENDAR = "calendar"
     const val CREATE_EVENT_SCREEN = "create_event_screen"
     const val FORUM = "forum"
+    const val FORUM_VIEW_THREAD = "forum_view_thread"
     const val FORUM_CREATE_THREAD = "forum_create_thread"
 }
