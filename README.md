@@ -8,22 +8,23 @@ BandBook lets bandmembers easily schedule band related events and get in contact
 
 ## Features
 
-- Login with Fire
-- Highlight what makes your project stand out.
+- Login with Google
+- Forum feature
+- Calendar feature
 
 ## Technologies Used
 
-- List the technologies, libraries, and frameworks you used in this project.
-- For example, React.js, Vue.js, CSS3, HTML5, etc.
+- Jetpack Compose
+- Kotlin
+- Gradle
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+Clone this repository and run main() from Application.kt
 
 ### Prerequisites
 
-What things you need to install the software and how to install them:
-
+Android Studio
 
 ### Installing
 
@@ -36,7 +37,7 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Usage
 
-Explain how to use your project. Include code blocks and screenshots if necessary.
+Explains how to use your project with code blocks and screenshots.
 
 ## Contributing
 
@@ -63,8 +64,6 @@ This project is licensed under the [LICENSE NAME] License - see the [LICENSE.md]
 ## Screenshots
 
 Include some screenshots of your project.
-
-![Screenshot](screenshot.png)
 
 ---
 
