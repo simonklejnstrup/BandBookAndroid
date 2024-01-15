@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thebandbook.authentication.firebase.sign_in.FirebaseUserData
 import com.example.thebandbook.data.commentdata.commentApiService
+import com.example.thebandbook.data.threaddata.ThreadRepository
 import com.example.thebandbook.data.threaddata.mockThreads
 import com.example.thebandbook.domain.model.Comment
 import com.example.thebandbook.domain.model.ForumThread
@@ -11,7 +12,6 @@ import com.example.thebandbook.navigation.NavigationEvent
 import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -28,9 +28,32 @@ class SharedThreadBottomSheetViewModel: ViewModel() {
     private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
     val navigationEvent = _navigationEvent.asSharedFlow()
 
+    private val repository = ThreadRepository()
+
     fun openBottomSheetWithThread(thread: ForumThread) {
         _selectedThread.value = thread
         _bottomSheetState.value = BottomSheetState.Open
+    }
+
+    fun loadThread(threadId: Int) {
+        viewModelScope.launch {
+            val response = repository.getThreadById(threadId)
+            if (response.isSuccessful) {
+                // Assign the thread from the response to _selectedThread
+                _selectedThread.value = response.body()
+                println("_selectedThread.value ${_selectedThread.value}")
+                println("_selectedThread.valueresponse.body() ${response.body()}")
+            } else {
+                // Handle the error case
+                // _selectedThread.value = null // if you want to reset the thread in case of an error
+            }
+        }
+    }
+
+    fun navigateToForumThreadScreen(thread: ForumThread) {
+        viewModelScope.launch {
+            _navigationEvent.emit(NavigationEvent.NavigateToForumThreadScreen(thread.id))
+        }
     }
 
     fun closeBottomSheet() {
