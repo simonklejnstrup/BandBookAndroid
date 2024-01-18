@@ -52,7 +52,7 @@ fun BottomNavigationBar(navController: NavController) {
                             ) else it.toString()
                         })
                     },
-                    selected = navController.currentBackStackEntryAsState().value?.destination?.route == screen.route,
+                    selected = isSelected || currentRoute == screen.route, //navController.currentBackStackEntryAsState().value?.destination?.route == screen.route,
                     onClick = {
                         navController.navigate(screen.route) {
                             navController.graph.startDestinationRoute?.let { route ->
@@ -72,6 +72,6 @@ fun BottomNavigationBar(navController: NavController) {
 
 val featureGroups = mapOf(
     "Calendar" to listOf(AppRoutes.CALENDAR, AppRoutes.CREATE_EVENT_SCREEN),
-    "Forum" to listOf(AppRoutes.FORUM, AppRoutes.FORUM_CREATE_THREAD),
+    "Forum" to listOf(AppRoutes.FORUM, AppRoutes.FORUM_CREATE_THREAD, AppRoutes.FORUM_VIEW_THREAD),
     "Dashboard" to listOf(AppRoutes.DASHBOARD, AppRoutes.SIGN_UP_SCREEN)
 )

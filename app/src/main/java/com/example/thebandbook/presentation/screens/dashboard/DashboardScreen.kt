@@ -52,15 +52,16 @@ import com.example.thebandbook.domain.model.ForumThread
 import com.example.thebandbook.domain.model.User
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.navigation.NavigationEvent
-import com.example.thebandbook.presentation.screens.calendar.EventItem
 import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
 import com.example.thebandbook.presentation.screens.common.CommentInfoRow
 import com.example.thebandbook.presentation.bottomsheets.EventDetailBottomSheet
 import com.example.thebandbook.presentation.bottomsheets.ThreadBottomSheet
+import com.example.thebandbook.presentation.screens.common.BottomNavCompensationSpacer
+import com.example.thebandbook.presentation.screens.common.EventItem
 import com.example.thebandbook.presentation.screens.common.ThreadBox
 import com.example.thebandbook.presentation.viewmodels.DashboardViewModel
 import com.example.thebandbook.presentation.viewmodels.SharedEventDetailsBottomSheetViewModel
-import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
+import com.example.thebandbook.presentation.viewmodels.ForumThreadViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 import com.example.thebandbook.presentation.screens.common.HSpacer
 import com.example.thebandbook.presentation.screens.common.VSpacer
@@ -80,8 +81,8 @@ fun DashboardScreen(
     val eventDetailBottomSheetState by sharedEventDetailsViewModel.bottomSheetState.collectAsState()
     val eventDetailModalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val sharedThreadBottomSheetViewModel: SharedThreadBottomSheetViewModel = viewModel()
-    val threadBottomSheetState by sharedThreadBottomSheetViewModel.bottomSheetState.collectAsState()
+    val forumThreadViewModel: ForumThreadViewModel = viewModel()
+    val threadBottomSheetState by forumThreadViewModel.bottomSheetState.collectAsState()
     val threadModalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val dashboardViewModel: DashboardViewModel = viewModel()
@@ -120,7 +121,7 @@ fun DashboardScreen(
 //        }
 //    }
 
-    ThreadBottomSheet(viewModel = sharedThreadBottomSheetViewModel)
+    ThreadBottomSheet(viewModel = forumThreadViewModel)
 
     EventDetailBottomSheet(viewModel = sharedEventDetailsViewModel)
     
@@ -151,6 +152,7 @@ fun DashboardScreen(
                                         .clip(CircleShape),
                                     contentScale = ContentScale.Crop)
                             }
+                            Spacer(modifier = Modifier.weight(1f))
                             Button(
                                 onClick = onSignOut,
                             ) {
@@ -187,8 +189,7 @@ fun DashboardScreen(
                     }
                 }
             }
-            // Compensate for Bottom Navigation Bar
-            VSpacer(height = 80.dp)
+            BottomNavCompensationSpacer()
         }
 
     }
@@ -337,12 +338,12 @@ fun DashboardHeader(
 
 
 
-@Composable
-fun DashboardNotLoggedInContent(
-    navController: NavController
-) {
-//    SignInScreen(navController)
-}
+//@Composable
+//fun DashboardNotLoggedInContent(
+//    navController: NavController
+//) {
+////    SignInScreen(navController)
+//}
 
 
 
@@ -371,37 +372,37 @@ fun TitleAndLogoRow() {
     }
 }
 
-@Preview(showBackground = false)
-@Composable
-fun DashboardNotLoggedInContentPreview() {
-    TheBandBookTheme {
-//        val viewModel: DashboardViewModel = viewModel()
-//        val loginData = DashboardViewModel.LoginData("j", "c")
-        DashboardNotLoggedInContent(
-//            viewModel = viewModel, loginData = loginData,
-            navController = rememberNavController()
-        )
-    }
-}
+//@Preview(showBackground = false)
+//@Composable
+//fun DashboardNotLoggedInContentPreview() {
+//    TheBandBookTheme {
+////        val viewModel: DashboardViewModel = viewModel()
+////        val loginData = DashboardViewModel.LoginData("j", "c")
+//        DashboardNotLoggedInContent(
+////            viewModel = viewModel, loginData = loginData,
+//            navController = rememberNavController()
+//        )
+//    }
+//}
 
 
-@Preview(showBackground = false)
-@Composable
-fun DashboardScreenPreview() {
-    TheBandBookTheme {
-        DashboardLoggedInContent(
-            user = User(
-                id = 1,
-                firstname = "Simon",
-                lastname = "Klejnstrup",
-                email = "ok@ok.dk",
-                band = "Balkan Basterds"
-            ),
-            onSettingsClick = {},
-            onThreadSelected = {},
-            onEventSelected = {})
-    }
-}
+//@Preview(showBackground = false)
+//@Composable
+//fun DashboardScreenPreview() {
+//    TheBandBookTheme {
+//        DashboardLoggedInContent(
+//            user = User(
+//                id = 1,
+//                firstname = "Simon",
+//                lastname = "Klejnstrup",
+//                email = "ok@ok.dk",
+//                band = "Balkan Basterds"
+//            ),
+//            onSettingsClick = {},
+//            onThreadSelected = {},
+//            onEventSelected = {})
+//    }
+//}
 
 @Preview(showBackground = false)
 @Composable

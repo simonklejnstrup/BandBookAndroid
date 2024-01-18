@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -37,10 +40,11 @@ import com.example.thebandbook.authentication.GoogleAuthClientSingleton
 import com.example.thebandbook.domain.model.Comment
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.navigation.NavigationEvent
+import com.example.thebandbook.presentation.screens.common.BottomNavCompensationSpacer
 import com.example.thebandbook.presentation.screens.common.CommentInfoRow
-import com.example.thebandbook.presentation.screens.common.SubmitButton
+import com.example.thebandbook.presentation.screens.common.ErrorScreen
 import com.example.thebandbook.presentation.screens.common.VSpacer
-import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
+import com.example.thebandbook.presentation.viewmodels.ForumThreadViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 
 @Composable
@@ -50,42 +54,33 @@ fun ForumThreadScreen(
 ) {
     var userInput by remember { mutableStateOf("") }
     val currentUser = GoogleAuthClientSingleton.googleAuthUiClient.getSignedInUser()
-    val viewModel: SharedThreadBottomSheetViewModel = viewModel()
-    val thread by viewModel.selectedThread.collectAsState()
+    val viewModel: ForumThreadViewModel = viewModel()
+    val threadState by viewModel.selectedThread.collectAsState()
+    val currentThread = threadState
+    val commentSubmissionSuccessful by viewModel.commentSubmissionSuccessful.collectAsState(initial = true)
 
-
-
-    // Observe navigation events
-    LaunchedEffect(key1 = Unit) {
-        viewModel.navigationEvent.collect { event ->
-            when (event) {
-                is NavigationEvent.NavigateToForumThreadScreen -> navController?.let {
-                    // Include the threadId in the navigation route
-                    val route = "${AppRoutes.FORUM_VIEW_THREAD}/${threadId}"
-                    navController.navigate(route)
-                }
-                else -> { }
-            }
+    LaunchedEffect(key1 = commentSubmissionSuccessful) {
+        if (commentSubmissionSuccessful) {
+            userInput = ""
+            viewModel.setCommentSubmissionSuccessful(false)
         }
-    }
-
-    LaunchedEffect(key1 = Unit) {
         viewModel.loadThread(threadId)
     }
 
     TheBandBookTheme {
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .fillMaxHeight()
                 .padding(horizontal = 15.dp)
         ) {
-            if (thread != null) {
+            if (currentThread != null) {
                 VSpacer(height = 30.dp)
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    text = thread!!.title ?: "",
+                    text = currentThread.title ?: "",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onPrimary)
                 VSpacer(height = 30.dp)
@@ -96,43 +91,35 @@ fun ForumThreadScreen(
                         .weight(1f),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    items(thread!!.comments) { comment ->
+                    items(currentThread.comments) { comment ->
                         CommentItem(comment = comment)
                     }
                 }
+
                 OutlinedTextField(
                     value = userInput,
                     onValueChange = { userInput = it },
                     label = { Text("Add a comment") },
+                    maxLines = 10,
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            if (currentUser != null) {
+                                currentThread?.let { currentThread ->
+                                    viewModel.submitComment(userInput, currentThread, currentUser)
+                                }
+                            }
+                        }) {
+                            Icon(Icons.Default.Send, contentDescription = "Submit")
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
                 )
-                SubmitButton(onClick = {
-                    if (currentUser != null) {
-                        thread?.let { currentThread ->
-                            viewModel.submitComment(userInput, currentThread, currentUser)
-                        }
-                    }
-                })
-                // Compensate for bottom nav
-                VSpacer(height = 60.dp)
+
+                BottomNavCompensationSpacer()
             } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    Icon(
-                        painterResource(
-                            id = R.drawable.ic_denied
-                        ),
-                        contentDescription = "Nothing found",
-                        modifier = Modifier
-                            .size(50.dp)
-                            .align(Alignment.Center)
-                    )
-                }
+                ErrorScreen()
             }
         }
     }
@@ -151,8 +138,6 @@ fun CommentItem(comment: Comment) {
                 comment = comment
             )
             CommentBox(
-//                modifier = Modifier
-//                    .height(200.dp),
                 comment = comment
             )
         }
@@ -188,7 +173,7 @@ fun CommentBox(
         ) {
             Text(
                 modifier = Modifier
-                    .padding(10.dp),
+                    .padding(15.dp),
                 text = comment.content,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary,
@@ -198,5 +183,11 @@ fun CommentBox(
         }
 
     }
+}
+
+@Preview
+@Composable
+fun ForumThreadScreenPreview(){
+    ForumThreadScreen(navController = null, threadId = 1)
 }
 

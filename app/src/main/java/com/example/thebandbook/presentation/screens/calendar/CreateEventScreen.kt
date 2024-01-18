@@ -4,6 +4,7 @@ package com.example.thebandbook.presentation.screens.calendar
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -23,6 +24,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -38,6 +40,7 @@ import com.example.thebandbook.domain.model.EventType
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.navigation.NavigationEvent
 import com.example.thebandbook.presentation.screens.common.GreenWideButton
+import com.example.thebandbook.presentation.screens.common.RedWideButton
 import com.example.thebandbook.presentation.screens.common.SubmitButton
 import com.example.thebandbook.presentation.screens.forum.GrayDivider
 import com.example.thebandbook.presentation.viewmodels.CreateEventViewModel
@@ -152,7 +155,7 @@ fun NoteInputButton(
     var showDialog by remember { mutableStateOf(false) }
     var text by rememberSaveable { mutableStateOf(note) }
 
-    GreenWideButton(
+    RedWideButton(
         label = "Note",
         onClick = {showDialog = true}
     )
@@ -190,7 +193,7 @@ fun NoteInputButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 6.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                             shape = RoundedCornerShape(4.dp),
                             onClick = {
                                 onNoteChange(text)
@@ -430,7 +433,7 @@ fun SegmentedControl(viewModel: CreateEventViewModel) {
             Button(
                 onClick = { viewModel.onEventTypeSelected(eventType) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (eventType == selectedEventType) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.tertiaryContainer,
+                    containerColor = if (eventType == selectedEventType) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiaryContainer,
                     contentColor = if (eventType == selectedEventType) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onPrimary
                 ),
                 modifier = Modifier
@@ -751,11 +754,21 @@ fun NumberPickerDialog(
                             onNumberSelected(tempNumber.toInt())
                             onDismissRequest()
                         },
-                        enabled = tempNumber.isNotEmpty()
+                        enabled = tempNumber.isNotEmpty(),
+                        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.onPrimary),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor =  MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
                     ) {
                         Text("OK")
                     }
-                    Button(onClick = onDismissRequest) {
+                    Button(
+                        onClick = onDismissRequest,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor =  MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )) {
                         Text("Cancel")
                     }
                 }

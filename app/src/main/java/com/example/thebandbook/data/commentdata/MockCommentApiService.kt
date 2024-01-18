@@ -11,11 +11,11 @@ import kotlin.random.Random
 class MockCommentApiService {
     fun createComment(
         content: String,
-        thread: ForumThread,
+        threadId: Int,
         currentUser: FirebaseUserData?
     ): Response<ForumThread> {
         // Find the thread in the mockThreads list
-        val foundThread = mockThreads.find { it.id == thread.id }
+        val foundThread = mockThreads.find { it.id == threadId }
 
         // Create the new comment
         val newComment = currentUser?.name?.let {
@@ -24,7 +24,7 @@ class MockCommentApiService {
                 content = content,
                 createdBy = currentUser.name,
                 createdAt = Instant.now(),
-                threadId = thread.id
+                threadId = threadId
             )
         }
 

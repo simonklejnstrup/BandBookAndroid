@@ -65,6 +65,8 @@ import com.example.thebandbook.domain.model.EventType
 import com.example.thebandbook.navigation.AppRoutes
 import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
 import com.example.thebandbook.presentation.bottomsheets.EventDetailBottomSheet
+import com.example.thebandbook.presentation.screens.common.BottomNavCompensationSpacer
+import com.example.thebandbook.presentation.screens.common.EventItem
 import com.example.thebandbook.presentation.viewmodels.SharedEventDetailsBottomSheetViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 import com.example.thebandbook.presentation.screens.common.HSpacer
@@ -82,7 +84,6 @@ fun CalendarScreen(
     modifier: Modifier = Modifier
 ) {
     val sharedViewModel: SharedEventDetailsBottomSheetViewModel = viewModel()
-    val authViewModel: AuthViewModel = viewModel()
     val bottomSheetState by sharedViewModel.bottomSheetState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -138,7 +139,7 @@ fun CalendarScreen(
                             }
                         }
                         item {
-                            Spacer(modifier = Modifier.height(80.dp))
+                            BottomNavCompensationSpacer()
                         }
                     }
                     // Gradient overlay
@@ -177,6 +178,7 @@ fun CalendarScreen(
         }
     }
 }
+
 
 
 
@@ -349,76 +351,7 @@ fun YearDivider(year: Int) {
     }
 }
 
-@Composable
-fun EventItem(
-    event: Event,
-    onClick: (Event) -> Unit
-) {
-    val shape = RoundedCornerShape(12.dp)
-    val context = LocalContext.current
 
-    TheBandBookTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp)
-                .clip(shape)
-                .background(
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                )
-                .clickable { onClick(event) }
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                verticalAlignment = Alignment.Top
-            ) {
-                AddressBox(
-                    event = event
-                )
-                HSpacer(width = 8.dp)
-                Column(
-                    modifier = Modifier
-                        .weight(1f),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = event.title,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight(700),
-                        style = LocalTextStyle.current.merge(
-                            TextStyle(
-                                platformStyle = PlatformTextStyle(
-                                    includeFontPadding = false
-                                ),
-                                lineHeightStyle = LineHeightStyle(
-                                    alignment = LineHeightStyle.Alignment.Top,
-                                    trim = LineHeightStyle.Trim.Both
-                                )
-                            )
-                        ),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                    Text(
-                        text = event.address,
-                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
-                        style = MaterialTheme.typography.bodyLarge,
-                        lineHeight = 16.sp
-                    )
-                }
-                HSpacer(width = 8.dp)
-                MapButton(
-                    onClick = {
-                        openMap(event.address, context)
-                    }
-                )
-            }
-
-        }
-    }
-}
 
 @Composable
 fun MapButton(

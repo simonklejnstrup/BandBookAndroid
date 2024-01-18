@@ -41,13 +41,13 @@ import com.example.thebandbook.authentication.GoogleAuthClientSingleton
 import com.example.thebandbook.domain.model.Comment
 import com.example.thebandbook.presentation.screens.common.CommentInfoRow
 import com.example.thebandbook.presentation.screens.common.SubmitButton
-import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
+import com.example.thebandbook.presentation.viewmodels.ForumThreadViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ThreadBottomSheet(viewModel: SharedThreadBottomSheetViewModel) {
+fun ThreadBottomSheet(viewModel: ForumThreadViewModel) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val bottomSheetState by viewModel.bottomSheetState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
@@ -76,7 +76,7 @@ fun ThreadBottomSheet(viewModel: SharedThreadBottomSheetViewModel) {
 
 @Composable
 fun ThreadBottomSheetContent(
-    viewModel: SharedThreadBottomSheetViewModel
+    viewModel: ForumThreadViewModel
 ) {
     var userInput by remember { mutableStateOf("") }
     val currentUser = GoogleAuthClientSingleton.googleAuthUiClient.getSignedInUser()
@@ -158,7 +158,7 @@ fun CommentItem(comment: Comment) {
 @Preview(showBackground = false)
 @Composable
 fun ThreadBottomSheetContentPreview() {
-    val viewModel: SharedThreadBottomSheetViewModel = viewModel()
+    val viewModel: ForumThreadViewModel = viewModel()
     ThreadBottomSheetContent(viewModel)
 }
 

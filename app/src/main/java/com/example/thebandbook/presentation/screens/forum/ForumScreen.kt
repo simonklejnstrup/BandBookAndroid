@@ -49,7 +49,7 @@ import com.example.thebandbook.presentation.bottomsheets.BottomSheetState
 import com.example.thebandbook.presentation.bottomsheets.ThreadBottomSheet
 import com.example.thebandbook.presentation.screens.common.CommentInfoRow
 import com.example.thebandbook.presentation.screens.common.ThreeDotMenu
-import com.example.thebandbook.presentation.viewmodels.SharedThreadBottomSheetViewModel
+import com.example.thebandbook.presentation.viewmodels.ForumThreadViewModel
 import com.example.thebandbook.ui.theme.TheBandBookTheme
 import kotlinx.coroutines.launch
 
@@ -60,8 +60,8 @@ fun ForumScreen(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val sharedThreadBottomSheetViewModel: SharedThreadBottomSheetViewModel = viewModel()
-    val threadBottomSheetState by sharedThreadBottomSheetViewModel.bottomSheetState.collectAsState()
+    val forumThreadViewModel: ForumThreadViewModel = viewModel()
+    val threadBottomSheetState by forumThreadViewModel.bottomSheetState.collectAsState()
     val threadModalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     LaunchedEffect(threadBottomSheetState) {
         when (threadBottomSheetState) {
@@ -71,7 +71,7 @@ fun ForumScreen(
     }
     // Observe navigation events
     LaunchedEffect(key1 = Unit) {
-        sharedThreadBottomSheetViewModel.navigationEvent.collect { event ->
+        forumThreadViewModel.navigationEvent.collect { event ->
             when (event) {
                 is NavigationEvent.NavigateToForumThreadScreen -> {
                     val route = "${AppRoutes.FORUM_VIEW_THREAD}/${event.threadId}"
@@ -89,7 +89,7 @@ fun ForumScreen(
             color = MaterialTheme.colorScheme.background
         ) {
 
-            ThreadBottomSheet(viewModel = sharedThreadBottomSheetViewModel)
+            ThreadBottomSheet(viewModel = forumThreadViewModel)
 
             Column(
                 modifier = Modifier
@@ -118,7 +118,7 @@ fun ForumScreen(
                         items(sortedThreads) { thread ->
                             ThreadItem(
                                 thread,
-                                onClick = {sharedThreadBottomSheetViewModel.navigateToForumThreadScreen(thread)})
+                                onClick = {forumThreadViewModel.navigateToForumThreadScreen(thread)})
                         }
                         // Frees the last card from the bottom nav
                         item {

@@ -21,6 +21,7 @@ import com.example.thebandbook.presentation.screens.authentication.SignInScreen
 import com.example.thebandbook.presentation.screens.authentication.SignUpScreen
 import com.example.thebandbook.presentation.screens.calendar.CalendarScreen
 import com.example.thebandbook.presentation.screens.calendar.CreateEventScreen
+import com.example.thebandbook.presentation.screens.common.ErrorScreen
 import com.example.thebandbook.presentation.screens.dashboard.DashboardScreen
 import com.example.thebandbook.presentation.screens.forum.ForumCreateThreadScreen
 import com.example.thebandbook.presentation.screens.forum.ForumScreen
@@ -56,9 +57,9 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         appComposable(AppRoutes.CREATE_EVENT_SCREEN) { navController, _ ->
-                            CreateEventScreen(
-                                navController
-                            )
+                            AuthenticatedScreenWrapper(navController) {
+                                CreateEventScreen(navController)
+                            }
                         }
                         appComposable(AppRoutes.FORUM) { navController, _ ->
                             AuthenticatedScreenWrapper(navController) {
@@ -70,14 +71,19 @@ class MainActivity : ComponentActivity() {
                             val threadId = threadIdString?.toIntOrNull() ?: -1 // Default to -1 if conversion fails
 
                             println("backStackEntry.arguments? threadId :::${threadId}")
-                            if (threadId != null) {
-                                // Todo: AuthenticatedScreenWrapper(navController) {
-                                ForumThreadScreen(navController, threadId)
+                            if (threadId != -1) {
+                                AuthenticatedScreenWrapper(navController) {
+                                    ForumThreadScreen(navController, threadId)
+                                }
                             } else {
-//                                ErrorScreen()
+                                ErrorScreen()
                             }
                         }
-                        appComposable(AppRoutes.FORUM_CREATE_THREAD) { navController, _ -> ForumCreateThreadScreen(navController = navController) }
+                        appComposable(AppRoutes.FORUM_CREATE_THREAD) { navController, _ ->
+                            AuthenticatedScreenWrapper(navController) {
+                                ForumCreateThreadScreen(navController = navController)
+                            }
+                        }
                         appComposable(AppRoutes.DASHBOARD) { navController, _ ->
                             AuthenticatedScreenWrapper(navController) {
                                 DashboardScreen(
