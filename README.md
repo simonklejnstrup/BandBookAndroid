@@ -28,7 +28,7 @@ Android Studio
 
 ## Authors
 
-- **Simon Klejnstrup** - *Initial work* - [simonklejnstrup](https://github.com/simonklejnstrup)
+- **Simon Klejnstrup** - [simonklejnstrup](https://github.com/simonklejnstrup)
 
 ## License
 
@@ -38,9 +38,10 @@ This project is licensed under the [MIT] License - see the [LICENSE.md](LICENSE.
 
 ## Screenshots
 
-| Command | Description | Command | Description |
+
+| Dashboard | Forum | New calendar entry | Description |
 | --- | --- |  --- | --- |
-| ![Screenshot_20240514_201337_theBandBook](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/30aa6a84-0e34-464b-a930-73c9aab50529)<br>*Billede Beskrivelse* | ![Screenshot_20240514_201337_theBandBook](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/30aa6a84-0e34-464b-a930-73c9aab50529) | ![Screenshot_20240514_201325_theBandBook](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/ef062545-4d38-4423-96d4-30026c419d41)| ![Screenshot_20240514_201309_theBandBook](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/6ddf9ea5-1586-4bde-8c95-20c09e4274ef) |![Screenshot_20240514_201255_theBandBook](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/f3936249-e6ff-45e3-9deb-3afffc1deeaa) |
+| ![Screenshot_BandBook_Dashboard](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/79515725-2371-4b9c-9779-52ac3090d387)| ![Screenshot_BandBook_Forum](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/30aa6a84-0e34-464b-a930-73c9aab50529) | ![Screenshot_BandBook_NewCalendarEntry](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/ef062545-4d38-4423-96d4-30026c419d41)| ![Screenshot_20240514_201309_theBandBook](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/6ddf9ea5-1586-4bde-8c95-20c09e4274ef) |![Screenshot_20240514_201255_theBandBook](https://github.com/simonklejnstrup/BandBookAndroid/assets/63997120/f3936249-e6ff-45e3-9deb-3afffc1deeaa) |
 
 
 ---
